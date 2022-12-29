@@ -1,0 +1,90 @@
+<div class="logo">
+  <a href="#"><img src="/assets/img/logo/logo.png" alt="" /></a>
+</div>
+
+<section style="padding-top: 30px">
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="text-center">Add Category</h2>
+        <form
+          action="/admin/addCategory"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="form-outline mb-4">
+            <!-- <input.
+              type="text"
+              name="name"
+              id="form4Example1"
+              class="form-control"
+            />
+            <label class="form-label" for="form4Example1">Name</label> -->
+            <label for="">Category Name</label>
+            <input type="text" name="name" required class="form-control" />
+          </div>
+
+       
+          <div class="form-outline mb-4">
+            <textarea
+              name="description"
+              class="form-control"
+              id="form4Example3"
+              rows="4"
+            ></textarea>
+            <label class="form-label" for="form4Example3">Description</label>
+          </div>
+
+          <div class="form-outline mb-4">
+            <input type="file" name="img" id="image" class="form-control" />
+            <label class="form-label" for="form4Example1">Image</label>
+          </div>
+
+          <button     style="
+              height: 10px;
+              background-color: rgb(18, 109, 165);
+              color: rgb(255, 255, 255);
+            " type="submit" class="btn btn-primary btn-block mb-4">
+            Add Category
+          </button>
+        </form>
+
+
+
+        <!-- <form action="/admin/addCategory" method="post"     enctype="multipart/form-data"
+        >
+          <label for="">Category Name</label>
+          <input type="text" name="name" required class="form-control" />
+
+          <label for="">Discription</label>
+          <input
+            type="text"
+            name="description"
+            required
+            class="form-control"
+          />
+          <div class="col-md-4">
+            <input
+              id="image"
+              name="img"
+              class=""
+              type="file"
+            />
+          </div>
+          <br />
+          <button
+            style="
+              height: 10px;
+              background-color: rgb(18, 109, 165);
+              color: rgb(255, 255, 255);
+            "
+            type="submit"
+            class="btn text-white bg-black btn-sm mt-4"
+          >
+            Create Category
+          </button>
+        </form> -->
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+<%- include('../partials/admin_header.ejs') %>
+<div class="container">
+  <table class="table table-striped">
+    <thead style="color: greenyellow">
+      <tr>
+        <th class="p-4" scope="col"><h5>No</h5></th>
+        <th class="p-4" scope="col"><h5>Name</h5></th>
+        <th class="p-4" scope="col"><h5>Email</h5></th>
+        <th class="p-4" scope="col"><h5>Mobile.No</h5></th>
+        <th class="p-4" scope="col"><h5>Options</h5></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% userlist.forEach(function(user,index) { %>
+      <tr>
+        <th class="p-4" scope="row"><%=index+1 %></th>
+        <td class="p-4" scope="row"><b><%= user.name%></b></td>
+        <td class="p-4" scope="row"><b><%= user.email %></b></td>
+        <td class="p-4" scope="row"><b><%= user.mobile %></b></td>
+
+       
+
+        <td>
+          <% if(user.access) { %> 
+          <a style=" height: 10px; 
+          background-color: rgb(18, 109, 165);  color: rgb(255, 255, 255);
+          " class="btn btn-primary btn-sm m-2"  href="/admin/blockUser/<%=user._id  %> ">Block</a>
+          <%}else{ %> 
+            <a style=" height: 10px; 
+            background-color: rgb(18, 109, 165);  color: rgb(255, 255, 255);
+            " class="btn btn-primary btn-sm m-2"  href="/admin/unblockUser/<%=user._id  %> ">Unblock</a>
+            <% } %> 
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+
+
+
+

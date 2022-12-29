@@ -1,0 +1,50 @@
+<%- include('../partials/admin_header.ejs') %>
+
+<div class="container">
+  <table class="table table-striped">
+    <thead style="color: greenyellow">
+      <tr>
+        <th class="p-4" scope="col"><h5>Number</h5></th>
+        <th class="p-4" scope="col"><h5>Category</h5></th>
+        <th class="p-4" scope="col"><h5>Image</h5></th>
+        <th class="p-4" scope="col"><h5>Description</h5></th>
+        <th class="p-4" scope="col"><h5>Actions</h5></th>
+      </tr>
+    </thead>
+    <a
+      style="
+        height: 10px;
+        background-color: rgb(18, 109, 165);
+        color: rgb(255, 255, 255);
+      "
+      class="btn btn-primary btn-sm m-2"
+      href="/admin/addCategory"
+      >Add Category</a
+    >
+    <br />
+    <tbody>
+      <% categoryList.forEach(function(category,index) { %>
+      <tr>
+        <th class="p-4" scope="row"><%=index+1 %></th>
+        <td class="p-4" scope="row"><b><%= category.name%></b></td>
+        <td class="p-4" scope="row"><b><img src="<%= category.img %>" width="70px" height="auto" alt=""> </b></td>
+        <td class="p-4" scope="row"><b><%= category.description %></b></td>
+        <td>
+         
+          <a style=" padding: 7px; width: 20px; height: auto; color: black;" href="/admin/editCategory/<%= category._id  %>"> <i class="bi bi-pen"></i></i></a> 
+          <a onclick="return confirm('Are you sure?')" style= " padding: 7px; width: 20 px; height: auto; color: black;" href="/admin/deleteCategory/<%= category._id  %> "><i class="bi bi-trash"></i></a>
+          
+        </td>
+       
+
+      
+      </tr>
+      <% }); %>
+    </tbody>
+
+  </table>
+</div>
+
+<script> function myFuncion(){
+alert("Are you sure to delete");
+};</script>
