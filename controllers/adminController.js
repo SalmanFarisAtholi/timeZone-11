@@ -35,7 +35,9 @@ module.exports = {
     res.render("admin/user_management", { admin: true, userlist });
   },
   categoryManage: async (req, res) => {
-    const categoryList = await category.find({ access: { $not: { $eq: false } } });
+    const categoryList = await category.find({
+      access: { $not: { $eq: false } },
+    });
 
     res.render("admin/category_management", { admin: true, categoryList });
   },
@@ -72,7 +74,7 @@ module.exports = {
     console.log(image);
     console.log(req.body);
     if (!image) {
-      res.render("admin/addCategory", {
+      res.redirect("/admin/addCategory", {
         user: false,
         admin: true,
         error: "file is not a image",
@@ -88,7 +90,7 @@ module.exports = {
     });
     newCategory
       .save()
-      .then((newOne) => {
+      .then((newOne) => { 
         console.log(newOne);
         res.redirect("/admin/categorys");
       })
@@ -148,5 +150,78 @@ module.exports = {
     const oneCategory = await category.findOne({ _id: id });
     res.render("admin/edit_category", { oneCategory });
     console.log(oneCategory);
+  },
+  postEditCategory: async (req, res) => {
+    const id = req.params.id;
+    const updatedName = req.body.name;
+    const updatedDescription = req.body.description;
+    const image = req.files.img;
+    const cat = { name: updatedName, description: updatedDescription };
+    if (image) {
+      const imageUrl = image[0].path.substring(6);
+      console.log(`hi ${imageUrl}`);
+      cat.image = imageUrl;
+    }
+    console.log(cat.image);
+
+    await category.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: cat.name,
+          description: cat.description,
+          img: cat.image,
+        },
+      }
+    );
+    res.redirect("/admin/categorys");
+  },
+  editProduct: async (req, res) => {
+    const id = req.params.id;
+    const categoryList = await category.find();
+    const oneProduct = await products.findOne({ _id: id });
+    res.render("admin/edit_product", { oneProduct, categoryList });
+    console.log(oneProduct);
+  },
+  postEditProduct: async (req, res) => {
+    const id = req.params.id;
+    console.log(id,00000000000000000);
+    const updatedName = req.body.name;
+    const updatedDescription = req.body.description;
+    const image = req.files.img;
+    const updatedStock = req.body.stock;
+    const updatedPrice = req.body.price;
+    const updatedMfg = req.body.mfg;
+    const updatedCategory = req.body.category;
+    const pro = {
+      name: updatedName,
+      description: updatedDescription,
+      stock: updatedStock,
+      price: updatedPrice,
+      mfg: updatedMfg,
+      category: updatedCategory,
+    };
+    if (image) {
+      const imageUrl = image[0].path.substring(6);
+      console.log(`hi ${imageUrl}`);
+      pro.image = imageUrl;
+    }
+    console.log(pro.image);
+
+    await products.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: pro.name,
+          description: pro.description,
+          img: pro.image,
+          stock: pro.stock,
+          mfg: pro.mfg,
+          category: pro.category,
+          price: pro.price,
+        },
+      }
+    );
+    res.redirect("/admin/products");
   },
 };

@@ -1,0 +1,99 @@
+<%- include('../partials/user_header.ejs') %>
+
+<main>
+  <div class="slider-area">
+    <div class="single-slider slider-height2 d-flex align-items-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="hero-cap text-center">
+              <h2>Wishlist</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="cart_area section_padding">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <%prd.productItems.forEach(function(pro) {%>
+
+              <tr>
+                <td>
+                  <div class="media">
+                    <div class="d-flex">
+                      <img
+                        src="<%=pro.img %> "
+                        width="150px"
+                        height="auto"
+                        alt=""
+                      />
+                    </div>
+                    <div class="media-body">
+                      <p>
+                        <%= pro.mfg%> <%= pro.name%> <br />
+                        <%= pro.description %>
+                      </p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <h5>₹<%= pro.price%></h5>
+                </td>
+
+                <td>
+                  <a class="btn_1" href="/deleteWishlist/<%=pro._id%>"
+                    >Remove</a
+                  >
+               
+                </td>
+                <td>   <a class="btn_1" href="/addtocart/<%=pro._id%>"
+                    >Add to Cart</a>
+                  </td>
+
+                <% }); %>
+              </tr>
+              <tr class="bottom_button">
+                <td>
+                  <a class="btn_1" href="/shop">Continue Shopping</a>
+                </td>
+                <td></td>
+                <td></td>
+                
+          
+        </div>
+      </div>
+
+      <div class="search-model-box">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+          <div class="search-close-btn">+</div>
+          <form class="search-model-form">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Searching key....."
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+
+
+

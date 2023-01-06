@@ -16,7 +16,10 @@ const {
      deleteCategory,
      createProduct,
      deleteProduct,
-     editCategory
+     editCategory,
+     postEditCategory,
+     editProduct,
+     postEditProduct
 } = require('../controllers/adminController')
 router.get('/',login)
 router.post('/',loginPost)
@@ -25,11 +28,12 @@ router.get('/users',userManage)
 router.get('/categorys',categoryManage)
 router.get('/products',productManage)
 router.get('/dashboard',dashboard)
-
 router.get('/addCategory',addCategory)
 router.get('/addProduct',addProduct)
 router.get('/editCategory/:id',editCategory)
-// router.get('/editProduct')
+router.post('/editCategory/:id',postEditCategory)
+router.get('/editProduct/:id',editProduct)
+router.post('/editProduct/:id',postEditProduct)
 router.get('/deleteCategory/:id',deleteCategory)
 router.get('/deleteProduct/:id',deleteProduct)
 router.get('/blockUser/:id',blockUser)

@@ -26,7 +26,9 @@ const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
+    file.mimetype === "image/jpeg"||
+    file.mimetype === "image/webp"
+
   ) {
     // upload only png and jpg format
 
@@ -46,7 +48,7 @@ app.use(express.static("public"));
 app.use(
   session({
     secret: "key",
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 60000000 },
     resave: true,
     saveUninitialized: true,
   })

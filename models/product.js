@@ -4,6 +4,7 @@ const productSchema = new Mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique:true,
   },
   price: {
     type: Number,
@@ -33,7 +34,7 @@ const productSchema = new Mongoose.Schema({
     type: Boolean,
     default: true,
   },
-});
+});   
 
 module.exports = Mongoose.model("product", productSchema);
 
@@ -52,7 +53,7 @@ module.exports = Mongoose.model("product", productSchema);
 //     image:
 //       "https://preview.colorlib.com/theme/timezone/assets/img/gallery/popular2.png",
 //   },
-//   {
+//   {  
 //     name: "DAY-DATE 40",
 //     price: "₹ 560,000",
 //     description: "Oyster, 40 mm, platinum",
