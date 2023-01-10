@@ -1,0 +1,142 @@
+<%- include('../partials/user_header.ejs') %>
+
+<div class="container py-5">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col">
+      <h3 class="mb-4 text-uppercase">Add Your Address</h3>
+
+      <form method="post" action="/postAddress">
+        <div style="padding: 20px" class="card my-4 shadow-3">
+          <div class="row g-0">
+            <div class="col-xl-6">
+              <div class="card-body p-md-5 text-black">
+                <div class="row">
+
+                    
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <input
+                        type="text"
+                        name="fName"
+                        id="form3Example1m"
+                        class="form-control form-control-lg"
+                      />
+                      <label class="form-label" for="form3Example1m"
+                        >First Name</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <input
+                      name="lName"
+                        type="text"
+                        id="form3Example1n"
+                        class="form-control form-control-lg"
+                      />
+                      <label class="form-label" for="form3Example1n"
+                        >Last Name</label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input
+                  name="house"
+                    type="text"
+                    id="form3Example8"
+                    class="form-control form-control-lg"
+                  />
+                  <label class="form-label" for="form3Example8"
+                    >House Name</label
+                  >
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <select name="state" class="select">
+                      <option value="1">State</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Thamilnadu">Thamilnadu</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input
+                  name="city"
+                    type="text"
+                    id="form3Example2"
+                    class="form-control form-control-lg"
+                  />
+                  <label class="form-label" for="form3Example2"
+                    >City/Town</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-6">
+              <div class="card-body p-md-5 text-black">
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <input
+                      name="mob"
+                        type="text"
+                        id="form3Example1m"
+                        class="form-control form-control-lg"
+                      />
+                      <label class="form-label" for="form3Example1m"
+                        >Mobile Number</label
+                      >
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <input
+                      name="pincode"
+                        type="text"
+                        id="form3Example1n"
+                        class="form-control form-control-lg"
+                      />
+                      <label class="form-label" for="form3Example1n"
+                        >Zip/Post code
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input
+                  name="landmark"
+                    type="text"
+                    id="form3Example8"
+                    class="form-control form-control-lg"
+                  />
+                  <label class="form-label" for="form3Example8">Landmark</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input
+                  name="district"
+                    type="text"
+                    id="form3Example2"
+                    class="form-control form-control-lg"
+                  />
+                  <label class="form-label" for="form3Example2">District</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button  type="submit" style="width: 250px; height: 60px" class="btn_1">
+            ADD ADDRESS
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

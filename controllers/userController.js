@@ -3,8 +3,8 @@ const { response } = require("express");
 const userHelpers = require("../helpers/userHelpers");
 const users = require("../models/userdb");
 const product = require("../models/product");
-
 const wishlist = require("../models/wishlist");
+const address = require("../models/address");
 
 // const {sendotp,verifyotp} = require("../uttilities/otp");
 
@@ -131,7 +131,7 @@ module.exports = {
     console.log("hi");
     let id = req.session.user._id;
     const products = req.params.id;
-    console.log("lllllllllllll",products);
+    console.log("lllllllllllll", products);
     const wish = await wishlist.findOne({ userId: id });
     if (wish) {
       // console.log('und');
@@ -161,13 +161,116 @@ module.exports = {
     }
   },
 
-   deleteWishlist:async(req,res)=>{
-   const proId = req.params.id;
-   let userId = req.session.user._id;
-   console.log(proId,"hiii",userId);
-   await wishlist.findOneAndUpdate({ userId:userId},{$pull:{productItems:proId}},{new:true});
-   res.redirect("/wishlist");
-    
-  }
+  deleteWishlist: async (req, res) => {
+    const proId = req.params.id;
+    let userId = req.session.user._id;
+    console.log(proId, "hiii", userId);
+    await wishlist.findOneAndUpdate(
+      { userId: userId },
+      { $pull: { productItems: proId } },
+      { new: true }
+    );
+    res.redirect("/wishlist");
+  },
+  userProfile: async (req, res) => {
+    let id = req.session.user._id;
+    let user = req.session.user;
 
+    const add = await address.findOne({ userId: id });
+    console.log("user profile");
+
+    res.render("user/profile", { user, add });
+  },
+  changeQuantity: async (req, res) => {
+    let user = req.session.user;
+    const userz = await users.findOne(user);
+    userz.changeQty(
+      req.body.productId,
+      req.body.qty,
+      req.body.count,
+      (response) => {
+        response.access = true;
+        console.log(response);
+        res.json(response);
+      }
+    );
+  },
+  addAddress: (req, res) => {
+    res.render("user/add_address");
+  },
+  postAddAddress: async (req, res) => {
+    let user = req.session.user._id;
+    console.log(user);
+    const add = await address.findOne({ userId: user });
+    if (add) {
+      await address.updateOne(
+        { userId: user },
+        { $push: { address: req.body } }
+      );
+      res.status(200);
+      // .json({status:true})
+    } else {
+      req.body.status = true;
+      const ad = new address({
+        address: [req.body],
+        userId: user,
+      });
+      ad.save((err, doc) => {
+        if (err) {
+          console.log(err);
+          res.redirect("/profile");
+        } else {
+          console.log(doc);
+          // res.json({status:true})
+        }
+      });
+    }
+    res.redirect("/profile");
+  },
+  deleteAddress: async (req, res) => {
+    console.log(req.params);
+    const addressId = req.params.id;
+    let user = req.session.user._id;
+    console.log(user);
+
+    address
+      .updateOne({ userId: user }, { $pull: { address: { _id: addressId } } })
+      .then(() => console.log("Deleted"))
+      .catch((er) => console.log(er));
+    res.redirect("/profile");
+  },
+  editAddress: async (req, res) => {
+    const id = req.params.id;
+    let user = req.session.user._id;
+
+    const boneAddress = await address.aggregate([
+      {
+        $match: { userId: user },
+      },
+      {
+        $project: { address: 1 },
+      },
+      {
+        $unwind: "$address",
+      },
+      {
+        $match: { "address._id": id },
+      },
+    ]);
+    console.log(boneAddress, "adrrrrrrrrrrrrrrresssssssssssssssss");
+    res.render("user/edit_address", { boneAddress });
+  },
+  checkout: async (req, res) => {
+    const uzerId = req.session.user._id;
+
+    const userz = await users.findOne({ _id: uzerId });
+    const add = await address.findOne({ userId: uzerId });
+
+
+    let user = await userz.populate("cart.items.productId");
+
+    res.render("user/checkout", { user,add });
+
+  },
 };
+ 

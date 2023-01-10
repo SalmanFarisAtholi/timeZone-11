@@ -18,14 +18,21 @@ const {
     deleteCart,
     viewWishList,
     doAddToWishlist,
-    deleteWishlist
+    deleteWishlist,
+    userProfile,
+    changeQuantity,
+    addAddress,
+    postAddAddress,
+    deleteAddress,
+    editAddress,
+    checkout
 } = require ('../controllers/userController')
 const product = require('../models/product')
 
 
 router.get('/',index)
 router.get('/login',login)
-router.get('/signup',signup)
+router.get('/signup',signup)  
 router.get('/home',home)
 router.get('/shop',shop)
 router.get('/signout',signout)
@@ -40,5 +47,15 @@ router.get('/deleteCart/:id',deleteCart)
 router.get('/wishlist',viewWishList)
 router.get('/addToWishlist/:id',doAddToWishlist)
 router.get('/deleteWishlist/:id',deleteWishlist)
+router.get('/profile',userProfile)
+router.post('changeQuantity',changeQuantity)
+router.get('/addAddress',addAddress)
+router.post('/postAddress',postAddAddress)
+router.get('/deleteAddress/:id',deleteAddress)
+router.get('/editAddress/:id',editAddress)
+router.get('/checkout',checkout)
+
+
+
 
 module.exports = router

@@ -48,12 +48,14 @@ const userSchema = new Mongoose.Schema({
 })
 
 userSchema.methods.addToCart = function (product) {
-  // console.log(product,'jkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+  console.log(product,'jkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+  let prid= product._id.toString() 
+  console.log(prid);
   let cart = this.cart;
   const isExisting = cart.items.findIndex(
-    (objInItems) => objInItems.productId == product._id
+    (objInItems=> objInItems.productId == prid)
   );
-  console.log(isExisting);
+  console.log(isExisting,"daaaaaaaaaaaaa");
   if (isExisting >= 0) {
     console.log("kooooooooooi");
     cart.items[isExisting].qty += 1;
@@ -66,7 +68,7 @@ userSchema.methods.addToCart = function (product) {
 
   cart.totalPrice += product.price;
 
-  console.log("user in scheemaa:", this);
+  console.log("user in scheemaa:", this); 
 
   return this.save();
 };
@@ -81,53 +83,53 @@ userSchema.methods.removeFromCart=function (product) {
     console.log(product.price+'my');
     console.log(cart.totalPrice+'hhhhhhhhhhhhhhh');
     cart.items.splice(isExisting,1);
-  
-
+   
+   
     return this.save()
   }
 }
 
-// userSchema.methods.changeQty = async function (productId, qty, count, cb) {
-//   const cart = this.cart
-//   console.log(qty)
-//   const quantity = parseInt(qty)
-//   const cnt = parseInt(count)
-//   console.log('%%%%%%' + quantity)
-//   const response = {}
-//   const product = await products.findOne({ _id: productId })
-//   if (cnt == -1 && quantity == 1 || cnt == -2) {
-//     const Existing = cart.items.findIndex(objitems => {
-//      return new String(objitems.product_id).trim() == new String(productId).trim()});
+userSchema.methods.changeQty = async function (productId, qty, count, cb) {
+  const cart = this.cart
+  console.log(qty)
+  const quantity = parseInt(qty)
+  const cnt = parseInt(count)
+  console.log('%%%%%%' + quantity)
+  const response = {}
+  const product = await products.findOne({ _id: productId })
+  if (cnt == -1 && quantity == 1 || cnt == -2) {
+    const Existing = cart.items.findIndex(objitems => {
+     return new String(objitems.product_id).trim() == new String(productId).trim()});
 
-//     cart.items.splice(Existing, 1)
-//     cart.totalPrice -= product.price * qty
-//     response.remove = true
-//   } else if (cnt == 1) {
-//     console.log('hiii-plus')
-//     const Existing = cart.items.findIndex(objitems => {
-//       return new String(objitems.product_id).trim() == new String(productId).trim()});
+    cart.items.splice(Existing, 1)
+    cart.totalPrice -= product.price * qty
+    response.remove = true
+  } else if (cnt == 1) {
+    console.log('hiii-plus')
+    const Existing = cart.items.findIndex(objitems => {
+      return new String(objitems.product_id).trim() == new String(productId).trim()});
       
 
-//     cart.items[Existing].qty += cnt
-//     console.log(cart.items[Existing].qty)
-//     cart.totalPrice += product.price
-//     response.status = cart.items[Existing].qty
-//   } else if (cnt == -1) {
-//     console.log('hiiiiiii-minus')
-//     const Existing = cart.items.findIndex(objitems => {
-//       return new String(objitems.product_id).trim() == new String(productId).trim()});
+    cart.items[Existing].qty += cnt
+    console.log(cart.items[Existing].qty)
+    cart.totalPrice += product.price
+    response.status = cart.items[Existing].qty
+  } else if (cnt == -1) {
+    console.log('hiiiiiii-minus')
+    const Existing = cart.items.findIndex(objitems => {
+      return new String(objitems.product_id).trim() == new String(productId).trim()});
      
 
-//     cart.items[Existing].qty += cnt
-//     console.log(cart.items[Existing])
-//     cart.totalPrice -= product.price
-//     response.status = cart.items[Existing].qty
-//   }
-//   this.save().then((doc) => {
-//     response.total = doc.cart.totalPrice
-//     cb(response)
-//   })
-// }
+    cart.items[Existing].qty += cnt
+    console.log(cart.items[Existing])
+    cart.totalPrice -= product.price
+    response.status = cart.items[Existing].qty
+  }
+  this.save().then((doc) => {
+    response.total = doc.cart.totalPrice
+    cb(response)
+  })
+}
 
 
 module.exports = Mongoose.model("users", userSchema);

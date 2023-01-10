@@ -1,0 +1,106 @@
+<%- include('../partials/user_header.ejs') %>
+<section style="background-color: #eee; padding-top: 15px">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img
+              src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?b=1&s=612x612&w=0&k=20&c=zdMrnElXIALTyT35otBWBGYH23t0zYiwwsg-6rjwnU4="
+              alt="avatar"
+              class="rounded-circle img-fluid"
+              style="width: 150px"
+            />
+
+            <h5 class="my-3"><%=user.name %></h5>
+            <p class="text-muted mb-1">TimeZone User</p>
+            <div class="d-flex justify-content-center mb-2"></div>
+          </div>
+          <a
+            style="display: flex; justify-content: center"
+            class="btn_1"
+            href="/addAddress/"
+            >ADD ADDRESS</a
+          >
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div style="padding-left: 30px; padding-top: 10px" class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p style="padding-right: 20px" class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><%=user.name %></p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-3">
+                <p style="padding-right: 20px" class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><%=user.email %></p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-3">
+                <p style="padding-right: 20px" class="mb-0">Phone</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><%=user.mobile%></p>
+              </div>
+            </div>
+            <hr />
+
+            <div class="row">
+              <div class="col-sm-3">
+                <p style="padding-right: 20px" class="mb-0">Address</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div style="padding-left: 30px; padding-top: 10px" class="card mb-4">
+          <div class="card-body">
+            <h5>SHIPPING ADDRESSES</h5>
+            <div class="row">
+              <% add.address.forEach(function(el) { %>
+
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">
+                  <%=el.fName%> ,<%=el.lName%>, <%=el.mob%>, <%=el.house%>,
+                  <%=el.landmark%> ,<%=el.city%>, <%=el.state%>, <%=el.district%>,
+                  <%=el.pincode%>
+                </p>
+                <a
+                style="padding: 7px; width: 20px; height: auto; color: black"
+                href="/editAddress/<%=el._id %> "
+              >
+                <i class="bi bi-pen"></i
+              ></a>
+              <a
+                onclick="return confirm('Are you sure?')"
+                style="padding: 7px; width: 20 px; height: auto; color: black"
+                href="/deleteAddress/<%=el._id %> "
+                ><i class="bi bi-trash"></i
+              ></a>
+              </div>
+
+           
+            </div>
+            <hr />
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
