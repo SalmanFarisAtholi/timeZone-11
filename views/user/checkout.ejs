@@ -1,3 +1,12 @@
+<head>
+  <script
+    src="https://code.jquery.com/jquery-3.6.3.js"
+    integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
 <%- include('../partials/user_header.ejs') %>
 
 <div class="slider-area">
@@ -18,10 +27,7 @@
   <div class="container">
     <div class="cupon_area">
       <div class="check_title">
-        <h2>
-          Have a coupon?
-          <a href="#">Click here to enter your code</a>
-        </h2>
+        <h2>Have a coupon?</h2>
       </div>
       <input type="text" placeholder="Enter coupon code" />
       <a class="tp_btn" href="#">Apply Coupon</a>
@@ -30,17 +36,21 @@
       <div class="row">
         <div class="col-lg-8">
           <h3>Billing Details</h3>
-
+          
+          <form id="checkout_form">
+       <% if (add) {%> 
           <% add.address.forEach(function(el) { %>
 
           <div style="padding-left: 30px; padding-top: 10px" class="card mb-4">
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-9">
-                  <input type="radio" id="f-option" name="selector" />
+                  <input type="radio" value="<%=el.fName%> <%=el.lName%>,<%=el.mob%>,<%=el.house%>,<%=el.landmark%>,<%=el.city%>,<%=el.state%>,<%=el.district%>,<%=el.pincode%>"
+
+                 id="f-option" name="selector" />
 
                   <p class="text-muted mb-0">
-                    <%=el.fName%> ,<%=el.lName%>, <%=el.mob%>, <%=el.house%>,
+                    <%=el.fName%> <%=el.lName%>, <%=el.mob%>, <%=el.house%>,
                     <%=el.landmark%> ,<%=el.city%>, <%=el.state%>,
                     <%=el.district%>, <%=el.pincode%>
                   </p>
@@ -51,12 +61,9 @@
           </div>
 
           <% }) %>
-          
-          <a
-          class="btn_1"
-          href="/addAddress/"
-          >ADD ADDRESS</a>
+          <% } %> 
 
+          <a class="btn_1" href="/addAddress/">ADD ADDRESS</a>
         </div>
 
         <div class="col-lg-4">
@@ -74,61 +81,124 @@
               <li>
                 <a href="#"
                   ><%= pro.productId.name%>
-                  <span class="middle">x<%=pro.qty %> </span>
-                  <span class="last"><%=pro.productId.price  %> </span>
+                  <span  class="middle">x<%=pro.qty %> </span>
+                  <span class="last"><%=pro.productId.price %> </span>
                 </a>
               </li>
+              <% }); %>
             </ul>
+
             <ul class="list list_2">
               <li>
                 <a href="#"
                   >Subtotal
-                  <span>$2160.00</span>
+                  <span>₹<%=user.cart.totalPrice%></span>
                 </a>
               </li>
               <li>
+                
                 <a href="#"
                   >Shipping
-                  <span>Flat rate: $50.00</span>
+                  <span>₹50</span>
                 </a>
               </li>
               <li>
                 <a href="#"
                   >Total
-                  <span>$2210.00</span>
+                  <span>₹<%=user.cart.totalPrice+50%></span>
                 </a>
               </li>
             </ul>
-                          <% }); %>
+            <div>
+             
 
-            <div class="payment_item">
-              <div class="radion_btn">
-                <input type="radio" id="f-option" name="selector" />
-                <label for="f-option5">Cash on delivary</label>
-                <div class="check"></div>
-              </div>
+
+
+              <div style="padding-top: 10px" class="payment_item">
+                  <div
+                    style="
+                      padding: 0px 25px 21px 25px;
+                      height: 14px;
+                      z-index: 9;
+                      cursor: pointer;
+                      font-family: Playfair Display, serif;
+                      font-weight: 500;
+                      color: #415094;
+                      font-size: 13px;
+                      letter-spacing: 0.25px;
+                      text-transform: uppercase;
+                    "
+                    class="radion"
+                  >
+                    <input
+                      type="radio"
+                      id="f-option"
+                      value="COD"
+                      name="payment"
+                    />
+                    <label for="COD">Cash on delivary</label>
+                  </div>
+                </div>
+                <div class="payment_item">
+                  <div
+                    style="
+                      padding: 0px 25px 21px 25px;
+                      height: 14px;
+                      z-index: 9;
+                      cursor: pointer;
+                      font-family: Playfair Display, serif;
+                      font-weight: 500;
+                      color: #415094;
+                      font-size: 13px;
+                      letter-spacing: 0.25px;
+                      text-transform: uppercase;
+                    "
+                    class="radion"
+                  >
+                    <input
+                      type="radio"
+                      id="f-option"
+                      value="RAZORPAY"
+                      name="payment"
+                    />
+                    <label for="RazorPay">RazorPay</label>
+                  </div>
+                  <p>
+                    Please check shipping Address and Product Details Before
+                    Place Order
+                  </p>
+                </div>
+
+                <button class="btn_3" type="submit">Place an Order</button>
+              </form>
             </div>
-            <div class="payment_item">
-              <div class="radion_btn">
-                <input type="radio" id="f-option" name="selector" />
-                <label for="f-option6">RazorPAy</label>
-                <img src="img/product/single-product/card.jpg" alt="" />
-                <div class="check"></div>
-              </div>
-              <p>
-                Please check shipping Address and Product Details Before Place
-                Order
-              </p>
-            </div>
-            <div class="creat_account">
-              <input type="checkbox" id="f-option4" name="selector" />
-              <label for="f-option4">I’ve read and accept the </label>
-              <a href="#">terms & conditions*</a>
-            </div>
-            <a class="btn_3" href="#">Place an Order</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<head>
+  <script
+    src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+    $("#checkout_form").submit((e) => {
+      e.preventDefault();
+      let op = document.getElementsByClassName("payment_item");
+      console.log("nan vannu");
+      $.ajax({
+        url: "/placeOrder",
+        method: "post",
+        data: $("#checkout_form").serialize(),
+        success: (response) => {
+         window.location='/orderPlaced'
+        },
+      });
+    });
+  </script>
+</head>

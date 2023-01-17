@@ -1,5 +1,6 @@
 const express = require('express')
 const { loginPost } = require('../controllers/adminController')
+const {verifyUser} = require("../middleware/middleware")
 const router = express.Router()
 const {
     login,
@@ -24,8 +25,11 @@ const {
     addAddress,
     postAddAddress,
     deleteAddress,
-    editAddress,
-    checkout
+    checkout,
+    placeOrder,
+    orders,
+    orderedPage,
+    cancelOrder
 } = require ('../controllers/userController')
 const product = require('../models/product')
 
@@ -35,27 +39,27 @@ router.get('/login',login)
 router.get('/signup',signup)  
 router.get('/home',home)
 router.get('/shop',shop)
-router.get('/signout',signout)
-router.get('/cart',cart)
-// router.get('/otp',otp)
-router.get('/productDetails',productDetails)
-router.get('/addtoCart/:id',addToCart)
+router.get('/signout',verifyUser,signout)
+router.get('/cart',verifyUser,cart)
+// router.get('/otp',verifyUser,otp)
+router.get('/productDetails',verifyUser,productDetails)
+router.get('/addtoCart/:id',verifyUser,addToCart)
 router.post('/signup',sign)
-// router.post('/otp',postOtp)
+// router.post('/otp',verifyUser,postOtp)
 router.post('/login',postLogin)
-router.get('/deleteCart/:id',deleteCart)
-router.get('/wishlist',viewWishList)
-router.get('/addToWishlist/:id',doAddToWishlist)
-router.get('/deleteWishlist/:id',deleteWishlist)
-router.get('/profile',userProfile)
-router.post('changeQuantity',changeQuantity)
-router.get('/addAddress',addAddress)
-router.post('/postAddress',postAddAddress)
-router.get('/deleteAddress/:id',deleteAddress)
-router.get('/editAddress/:id',editAddress)
-router.get('/checkout',checkout)
-
-
-
+router.get('/deleteCart/:id',verifyUser,deleteCart)
+router.get('/wishlist',verifyUser,viewWishList)
+router.get('/addToWishlist/:id',verifyUser,doAddToWishlist)
+router.get('/deleteWishlist/:id',verifyUser,deleteWishlist)
+router.get('/profile',verifyUser,userProfile)
+router.post('/changeQuantity',verifyUser,changeQuantity)
+router.get('/addAddress',verifyUser,addAddress)
+router.post('/postAddress',verifyUser,postAddAddress)
+router.get('/deleteAddress/:id',verifyUser,deleteAddress)
+router.get('/checkout',verifyUser,checkout)
+router.post('/placeOrder',verifyUser,placeOrder)
+router.get('/orders',verifyUser,orders)
+router.get('/orderPlaced',verifyUser,orderedPage)
+router.get('/cancelOrder/:id',verifyUser,cancelOrder)
 
 module.exports = router

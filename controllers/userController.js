@@ -5,7 +5,8 @@ const users = require("../models/userdb");
 const product = require("../models/product");
 const wishlist = require("../models/wishlist");
 const address = require("../models/address");
-
+const { data } = require("jquery");
+const order = require("../models/order");
 // const {sendotp,verifyotp} = require("../uttilities/otp");
 
 module.exports = {
@@ -182,6 +183,7 @@ module.exports = {
     res.render("user/profile", { user, add });
   },
   changeQuantity: async (req, res) => {
+    console.log("good boy");
     let user = req.session.user;
     const userz = await users.findOne(user);
     userz.changeQty(
@@ -239,38 +241,76 @@ module.exports = {
       .catch((er) => console.log(er));
     res.redirect("/profile");
   },
-  editAddress: async (req, res) => {
-    const id = req.params.id;
-    let user = req.session.user._id;
 
-    const boneAddress = await address.aggregate([
-      {
-        $match: { userId: user },
-      },
-      {
-        $project: { address: 1 },
-      },
-      {
-        $unwind: "$address",
-      },
-      {
-        $match: { "address._id": id },
-      },
-    ]);
-    console.log(boneAddress, "adrrrrrrrrrrrrrrresssssssssssssssss");
-    res.render("user/edit_address", { boneAddress });
-  },
   checkout: async (req, res) => {
     const uzerId = req.session.user._id;
-
     const userz = await users.findOne({ _id: uzerId });
     const add = await address.findOne({ userId: uzerId });
-
-
     let user = await userz.populate("cart.items.productId");
+    res.render("user/checkout", { user, add });
+  },
+  placeOrder: async (req, res) => {
+    console.log("Place Order is running");
+    console.log(req.body);
+    const uzerId = req.session.user._id;
+    const userz = await users.findOne({ _id: uzerId });
+    let product = await userz.populate("cart.items.productId");
+    var body = req.body.payment.toString();
+    var addId = req.body.selector;
+    console.log(addId);
+    let productIds = product.cart.items;
+    console.log(product.cart.items[0].productId, "koooi");
+    let totalPrice = product.cart.totalPrice;
+    console.log(totalPrice);
+    if (body === "COD") {
+      var statuz = "placed";
+      res.json((response.status = true));
+    } else {
+      var statuz = "pending";
+    }
+    console.log(statuz);
+    const newOrder = new order({
+      userId: uzerId,
+      date: new Date(),
+      total: totalPrice,
+      payment: body,
+      address: addId,
+      status: statuz,
+    });
+    newOrder.save();
+    console.log(newOrder);
 
-    res.render("user/checkout", { user,add });
-
+    // const proId = req.params.id;
+    // const userId = req.session.user._id;
+    // const userz = await users.findOne({ _id: userId });
+    // console.log(proId);
+    // userz
+    //   .removeFromCart(proId)
+    //   .then(() => {
+    //     res.redirect("/cart");
+    //   })
+    //   .catch((err) => console.log(err));
+  },
+  orders: async (req, res) => {
+    console.log("order..order!!!");
+    const uzerId = req.session.user._id;
+    console.log(uzerId);
+    const orde = await order.find({ userId: uzerId });
+    res.render("user/orders", { orde });
+  },
+  orderedPage: (req, res) => {
+    res.render("user/orderPlaced");
+  },
+  cancelOrder: async (req, res) => {
+    console.log(req.params);
+   const orderId=req.params
+  //  orderId.toString()
+    await order.updateOne(
+      { _id: req.params.id},
+      { $set: { status:"canceled" } }
+    );
+    console.log("req.params"); 
+    res.redirect('/orders')
   },
 };
  

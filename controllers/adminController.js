@@ -2,6 +2,7 @@ const products = require("../models/product");
 const users = require("../models/userdb");
 const category = require("../models/category");
 const adminHelpers = require("../helpers/adminHelpers");
+const order = require("../models/order");
 
 var adminEmail = process.env.adminEmail;
 var adminPassword = process.env.adminPassword;
@@ -90,7 +91,7 @@ module.exports = {
     });
     newCategory
       .save()
-      .then((newOne) => { 
+      .then((newOne) => {
         console.log(newOne);
         res.redirect("/admin/categorys");
       })
@@ -185,7 +186,7 @@ module.exports = {
   },
   postEditProduct: async (req, res) => {
     const id = req.params.id;
-    console.log(id,00000000000000000);
+    console.log(id, 00000000000000000);
     const updatedName = req.body.name;
     const updatedDescription = req.body.description;
     const image = req.files.img;
@@ -223,5 +224,12 @@ module.exports = {
       }
     );
     res.redirect("/admin/products");
+  },
+  bannerManage: (req, res) => {
+    res.render("admin/banner_management");
+  },
+  orderManage: async (req, res) => {
+    const ord = await order.find();
+    res.render("admin/order_management", { ord });
   },
 };

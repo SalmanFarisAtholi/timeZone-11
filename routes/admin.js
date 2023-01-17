@@ -1,4 +1,5 @@
 const express = require('express')
+const {verifyAdmin} =require('../middleware/middleware')
 const router = express.Router()
 const {
      login,
@@ -19,27 +20,32 @@ const {
      editCategory,
      postEditCategory,
      editProduct,
-     postEditProduct
+     postEditProduct,
+     bannerManage,
+     orderManage
 } = require('../controllers/adminController')
 router.get('/',login)
 router.post('/',loginPost)
 router.get('/signout',signout)
-router.get('/users',userManage)
-router.get('/categorys',categoryManage)
-router.get('/products',productManage)
-router.get('/dashboard',dashboard)
-router.get('/addCategory',addCategory)
-router.get('/addProduct',addProduct)
-router.get('/editCategory/:id',editCategory)
-router.post('/editCategory/:id',postEditCategory)
-router.get('/editProduct/:id',editProduct)
-router.post('/editProduct/:id',postEditProduct)
-router.get('/deleteCategory/:id',deleteCategory)
-router.get('/deleteProduct/:id',deleteProduct)
-router.get('/blockUser/:id',blockUser)
-router.get('/unblockUser/:id',unblockUser)
-router.post('/addCategory',createCategory)
-router.post('/addProduct',createProduct)
+router.get('/users',verifyAdmin,userManage)
+router.get('/categorys',verifyAdmin,categoryManage)
+router.get('/products',verifyAdmin,productManage)
+router.get('/dashboard',verifyAdmin,dashboard)
+router.get('/addCategory',verifyAdmin,addCategory)
+router.get('/addProduct',verifyAdmin,addProduct)
+router.get('/editCategory/:id',verifyAdmin,editCategory) 
+router.post('/editCategory/:id',verifyAdmin,postEditCategory)
+router.get('/editProduct/:id',verifyAdmin,editProduct)
+router.post('/editProduct/:id',verifyAdmin,postEditProduct)
+router.get('/deleteCategory/:id',verifyAdmin,deleteCategory)
+router.get('/deleteProduct/:id',verifyAdmin,deleteProduct)
+router.get('/blockUser/:id',verifyAdmin,blockUser)
+router.get('/unblockUser/:id',verifyAdmin,unblockUser)
+router.post('/addCategory',verifyAdmin,createCategory)
+router.post('/addProduct',verifyAdmin,createProduct)
+router.get('/banners',verifyAdmin,bannerManage) 
+router.get('/orders',verifyAdmin,orderManage)
+
 
 
 

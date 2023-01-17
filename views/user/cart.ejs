@@ -25,24 +25,38 @@
                 <th scope="col">Product</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">  </th>
-
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-            
+              <%user.cart.items.forEach(function(pro,count) {%> <%
+              if(user.cart.items===null||user.cart.items.length===0){ %>
+              <div class="row g-0 justify-content-center">
+                <div class="col-lg-8">
+                  <div class="d-flex justify-content-around align-items-center">
+                   
+                    <h1>Empty</h1>
+                  </div>
+                </div>
+              </div>
 
-              <%user.cart.items.forEach(function(pro,count) {%>
-
-            
+              <% }else{ %>
               <tr>
                 <td>
                   <div class="media">
                     <div class="d-flex">
-                      <img src="<%=pro.productId.img %> "  width="150px" height="auto" alt="" />
+                      <img
+                        src="<%=pro.productId.img %> "
+                        width="150px"
+                        height="auto"
+                        alt=""
+                      />
                     </div>
                     <div class="media-body">
-                      <p><%= pro.productId.mfg%> <%= pro.productId.name%> <br> <%= pro.productId.description %> </p>
+                      <p>
+                        <%= pro.productId.mfg%> <%= pro.productId.name%> <br />
+                        <%= pro.productId.description %>
+                      </p>
                     </div>
                   </div>
                 </td>
@@ -51,22 +65,39 @@
                 </td>
                 <td>
                   <div class="product_count">
-                    <button onclick="changeQuantity('<%=pro.productId._id%>','-1')" class="ti-angle-down" style="color: black;">-</button>
+                    <button
+                      onclick="changeQuantity('<%=pro.productId._id%>','-1')"
+                      class=""
+                      style="color: black"
+                    >
+                      -
+                    </button>
 
-                    <input style="height: 40px; width: 50px;;"
+                    <input
+                      style="height: 40px; width: 50px"
                       class="input-number"
                       value="<%= pro.qty%>"
-                      
+                      id="<%=pro.productId._id%>"
                     />
-                    <button onclick="changeQuantity('<%=pro.productId._id%>','+1')" style="color: black;" class="ti-angle-down" >+</button>
-
-                   </div>
+                    <button
+                      onclick="changeQuantity('<%=pro.productId._id%>','+1')"
+                      style="color: black"
+                      class=""
+                    >
+                      +
+                    </button>
+                  </div>
                 </td>
 
                 <td>
-                    <a onclick="return confirm ('Are you sure?')" class="btn_1" href="/deletecart/<%=pro.productId._id%>">Remove</a>
+                  <a
+                    onclick="return confirm ('Are you sure?')"
+                    class="btn_1"
+                    href="/deletecart/<%=pro.productId._id%>"
+                    >Remove</a>
+                  
                 </td>
-              <% }); %>  
+                <%} }); %>
               </tr>
               <tr class="bottom_button">
                 <td>
@@ -76,7 +107,7 @@
                 <td></td>
                 <td>
                   <div class="cupon_text float-right">
-                    <a class="btn_1" href="#">Close Coupon</a>
+                    <a class="btn_1" href="/wishlist">Wishlist</a>
                   </div>
                 </td>
               </tr>
@@ -87,17 +118,17 @@
                   <h5>Subtotal</h5>
                 </td>
                 <td>
-                  <h5><%= user.cart.totalPrice %> </h5>
+                  <h5><%= user.cart.totalPrice %></h5>
                 </td>
               </tr>
-              <tr class="shipping_area">
-    
-              </tr>
+              <tr class="shipping_area"></tr>
             </tbody>
           </table>
           <div class="checkout_btn_inner float-right">
             <a class="btn_1" href="/shop">Continue Shopping</a>
-            <a class="btn_1 checkout_btn_1" href="/checkout/">Proceed to checkout</a>
+            <a class="btn_1 checkout_btn_1" href="/checkout/"
+              >Proceed to checkout</a>
+            
           </div>
         </div>
       </div>
@@ -114,32 +145,31 @@
           </form>
         </div>
       </div>
-
     </div>
   </section>
 </main>
 
-
 <script>
-function changeQuantity(proId,cnt) {
-  console.log("chage qty running......................................................");
-  let quantity = document.getElementById(proId).value 
-  console.log(quantity);
-  quantity=parseInt(quantity)
-  let cont= parseInt(cnt)
+  function changeQuantity(proId, cnt) {
+    console.log("chage qty running..........................");
+    let quantity = document.getElementById(proId).value;
+    console.log(quantity);
+    quantity = parseInt(quantity);
+    let cont = parseInt(cnt);
 
-$.ajax({
-  url:'',
-  method:'POST',
-  data:{
-    productId:proId,
-    qty:quantity,
-    count:cont
+    $.ajax({
+      url: "/changeQuantity",
+      method: "POST",
+      dataType: "application/json",
+      encode: true,
+      data: {
+        productId: proId,
+        qty: quantity,
+        count: cont,
+      },
+      success: () => {},
+    });
   }
-})
-}
 </script>
-
-
 
 <%- include('../partials/user_footer.ejs') %>

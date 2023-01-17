@@ -12,6 +12,7 @@ const nocache = require("nocache");
 const morgan = require("morgan");
 const multer = require("multer");
 
+
 const fileStorage = multer.diskStorage({
   // Destination to store image
   destination: "public/images",
@@ -61,6 +62,7 @@ app.use(
     { name: "images", maxCount: 5 },
   ])
 );
+app.use(express.json())
 
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1/timeZone");

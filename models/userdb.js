@@ -1,6 +1,7 @@
 
 const Mongoose = require("mongoose");
-
+const product = require("../models/product");
+const Product = require("../models/product")
 
 const userSchema = new Mongoose.Schema({
   name: {
@@ -78,14 +79,15 @@ userSchema.methods.removeFromCart=function (product) {
   const isExisting = cart.items.findIndex(
     (objInItems) => objInItems.product == product._id
   );
-  console.log(isExisting+'ivifeeeeeeeeeeeee');
+  console.log(isExisting+'ivideeeeeeeeeeeee');
   if (isExisting>=0) {
     console.log(product.price+'my');
     console.log(cart.totalPrice+'hhhhhhhhhhhhhhh');
+
     cart.items.splice(isExisting,1);
    
-   
-    return this.save()
+    
+    return this.save()  
   }
 }
 
@@ -96,13 +98,13 @@ userSchema.methods.changeQty = async function (productId, qty, count, cb) {
   const cnt = parseInt(count)
   console.log('%%%%%%' + quantity)
   const response = {}
-  const product = await products.findOne({ _id: productId })
+  const Product = await product.findOne({ _id: productId })
   if (cnt == -1 && quantity == 1 || cnt == -2) {
     const Existing = cart.items.findIndex(objitems => {
      return new String(objitems.product_id).trim() == new String(productId).trim()});
 
     cart.items.splice(Existing, 1)
-    cart.totalPrice -= product.price * qty
+    cart.totalPrice -= Product.price * qty
     response.remove = true
   } else if (cnt == 1) {
     console.log('hiii-plus')
@@ -112,7 +114,7 @@ userSchema.methods.changeQty = async function (productId, qty, count, cb) {
 
     cart.items[Existing].qty += cnt
     console.log(cart.items[Existing].qty)
-    cart.totalPrice += product.price
+    cart.totalPrice += Product.price
     response.status = cart.items[Existing].qty
   } else if (cnt == -1) {
     console.log('hiiiiiii-minus')
@@ -121,16 +123,16 @@ userSchema.methods.changeQty = async function (productId, qty, count, cb) {
      
 
     cart.items[Existing].qty += cnt
-    console.log(cart.items[Existing])
+    console.log(cart.items[Existing]) 
     cart.totalPrice -= product.price
     response.status = cart.items[Existing].qty
   }
   this.save().then((doc) => {
     response.total = doc.cart.totalPrice
-    cb(response)
-  })
-}
-
+    cb(response)  
+  })  
+}  
+ 
 
 module.exports = Mongoose.model("users", userSchema);
 

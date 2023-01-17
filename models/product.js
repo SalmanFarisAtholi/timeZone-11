@@ -7,7 +7,7 @@ const productSchema = new Mongoose.Schema({
     unique:true,
   },
   price: {
-    type: Number,
+    type: Number, 
     required: true,
   },
   stock: {

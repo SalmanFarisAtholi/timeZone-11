@@ -70,34 +70,48 @@
       <div class="col-lg-8">
         <div style="padding-left: 30px; padding-top: 10px" class="card mb-4">
           <div class="card-body">
-            <h5>SHIPPING ADDRESSES</h5>
+            <h5>SHIPPING ADDRESSES</h5> 
             <div class="row">
+              <% if (add){ %> 
               <% add.address.forEach(function(el) { %>
 
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">
-                  <%=el.fName%> ,<%=el.lName%>, <%=el.mob%>, <%=el.house%>,
-                  <%=el.landmark%> ,<%=el.city%>, <%=el.state%>, <%=el.district%>,
-                  <%=el.pincode%>
-                </p>
-                <a
-                style="padding: 7px; width: 20px; height: auto; color: black"
-                href="/editAddress/<%=el._id %> "
-              >
-                <i class="bi bi-pen"></i
-              ></a>
-              <a
-                onclick="return confirm('Are you sure?')"
-                style="padding: 7px; width: 20 px; height: auto; color: black"
-                href="/deleteAddress/<%=el._id %> "
-                ><i class="bi bi-trash"></i
-              ></a>
-              </div>
+                <div  class="card mb-4">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-9">
+      
+                        <p class="text-muted mb-0">
+                          <%=el.fName%> <%=el.lName%>, <%=el.mob%>, <%=el.house%>,
+                          <%=el.landmark%> ,<%=el.city%>, <%=el.state%>,
+                          <%=el.district%>, <%=el.pincode%>
+                        </p>
+                        
+                        <!-- <a
+                        style="padding: 7px; width: 20px; height: auto; color: black"
+                        href="/editAddress/< %> "
+                      >
+                        <i class="bi bi-pen"></i
+                      ></a> -->
+                      
+                      <a
+                        onclick="return confirm('Are you sure?')"
+                        style="padding: 7px; width: 20 px; height: auto; color: black"
+                        href="/deleteAddress/<%=el._id %> "
+                        ><i class="bi bi-trash"></i
+                      ></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-           
+
+
+
+
+            
             </div>
-            <hr />
             <% }) %>
+            <% } %> 
           </div>
         </div>
       </div>
