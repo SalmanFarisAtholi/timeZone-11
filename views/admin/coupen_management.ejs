@@ -1,0 +1,153 @@
+<%- include('../partials/admin_header.ejs') %>
+
+<div class="container">
+  <table class="table table-striped">
+    <thead style="color: greenyellow">
+      <tr>
+        <th class="p-4" scope="col"><h5>Number</h5></th>
+        <th class="p-4" scope="col"><h5>Name</h5></th>
+        <th class="p-4" scope="col"><h5>Discount</h5></th>
+        <th class="p-4" scope="col"><h5>Minimum Cart Amount</h5></th>
+        <th class="p-4" scope="col"><h5>Start Date</h5></th>
+        <th class="p-4" scope="col"><h5>End Date</h5></th>
+        <th class="p-4" scope="col"><h5></h5></th>
+      </tr>
+    </thead>
+    <a
+      style="
+        height: 10px;
+        background-color: rgb(18, 109, 165);
+        color: rgb(255, 255, 255);
+      "
+      class="btn btn-primary btn-sm m-2"
+      data-toggle="modal"
+      data-target="#addCoupenModal"
+      >Add Coupen</a
+    >
+    <br />
+    <% coupens.forEach(function(coupen,index) { %>
+
+    <tbody>
+      <tr>
+        <td class="p-4" scope="row"><%=index+1%></td>
+        <td class="p-4" scope="row"><%=coupen.name%></td>
+        <td class="p-4" scope="row"><%=coupen.discount%></td>
+        <td class="p-4" scope="row"><%=coupen.minCartAmount%></td>
+        <td class="p-4" scope="row"><%=coupen.startDate%></td>
+        <td class="p-4" scope="row"><%=coupen.exDate%></td>
+        <td>
+            <a
+            style="padding: 7px; width: 20px; height: auto; color: black"
+            href="/admin/editCoupen/<%=coupen._id%>"
+          >
+            <i class="bi bi-pen"></i
+          ></a>
+          <a
+            onclick="return confirm('Are you sure?')"
+            style="padding: 7px; width: 20 px; height: auto; color: black"
+            href="/admin/deleteCoupen/<%=coupen._id%> "
+            ><i class="bi bi-trash"></i
+          ></a>
+        </td>
+      </tr>
+    </tbody>
+    <% }); %>
+  </table>
+</div>
+
+<div
+  class="modal fade"
+  id="addCoupenModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Coupen</h5>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form action="/admin/addCoupen" method="post" class="">
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="name"
+            class="form-control"
+            id="name"
+            name="name"
+            value=""
+            placeholder="Coupen Name"
+          />
+        </div>
+
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="number"
+            class="form-control"
+            id="discount"
+            name="discount"
+            value=""
+            placeholder="Discount"
+          />
+        </div>
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="number"
+            class="form-control"
+            id="minCartAmount"
+            name="minCartAmount"
+            value=""
+            placeholder="Min.Cart Amount"
+          />
+        </div>
+        <div class="col-md-12 form-group p_star">
+          <label for="">Start Date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="startDate"
+            name="startDate"
+            value=""
+            placeholder="StartDate"
+          />
+        </div>
+        <div class="col-md-12 form-group p_star">
+          <label for="">End Date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="exDate"
+            name="exDate"
+            value=""
+            placeholder="Expiry Date"
+          />
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add Coupen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

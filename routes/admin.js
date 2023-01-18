@@ -21,8 +21,12 @@ const {
      postEditCategory,
      editProduct,
      postEditProduct,
-     bannerManage,
-     orderManage
+     orderManage,
+     coupenManage,
+     addCoupen,
+     deleteCoupen,
+     editCoupen,
+     postEditCoupen
 } = require('../controllers/adminController')
 router.get('/',login)
 router.post('/',loginPost)
@@ -43,9 +47,12 @@ router.get('/blockUser/:id',verifyAdmin,blockUser)
 router.get('/unblockUser/:id',verifyAdmin,unblockUser)
 router.post('/addCategory',verifyAdmin,createCategory)
 router.post('/addProduct',verifyAdmin,createProduct)
-router.get('/banners',verifyAdmin,bannerManage) 
 router.get('/orders',verifyAdmin,orderManage)
-
+router.get('/coupens',verifyAdmin,coupenManage)
+router.post('/addCoupen',verifyAdmin,addCoupen)
+router.get('/deleteCoupen/:id',verifyAdmin,deleteCoupen)
+router.get('/editCoupen/:id',verifyAdmin,editCoupen)
+router.post('/editCoupen/:id',verifyAdmin,postEditCoupen)
 
 
 

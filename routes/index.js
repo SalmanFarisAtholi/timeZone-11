@@ -29,7 +29,8 @@ const {
     placeOrder,
     orders,
     orderedPage,
-    cancelOrder
+    cancelOrder,
+    changePassword
 } = require ('../controllers/userController')
 const product = require('../models/product')
 
@@ -61,5 +62,6 @@ router.post('/placeOrder',verifyUser,placeOrder)
 router.get('/orders',verifyUser,orders)
 router.get('/orderPlaced',verifyUser,orderedPage)
 router.get('/cancelOrder/:id',verifyUser,cancelOrder)
+router.post('/changePassword',verifyUser,changePassword)
 
 module.exports = router

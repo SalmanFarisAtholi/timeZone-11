@@ -2,7 +2,7 @@ const products = require("../models/product");
 const users = require("../models/userdb");
 const category = require("../models/category");
 const { response } = require("express");
-
+const coupen = require("../models/coupon");
 module.exports = {
   deleteCategory: (id) =>
     new Promise((resolve, reject) => {
@@ -21,6 +21,13 @@ module.exports = {
         .then((response) => {
           resolve(response);
         });
+    }),
+  deleteCoupen: (id) =>
+    new Promise((resolve, reject) => {
+      const coupenId = id;
+      coupen.findByIdAndUpdate(coupenId, { status: false }).then((response) => {
+        resolve(response);
+      });
     }),
   // editCategory:(id)=>
   //   new Promise((resolve,reject)=>{

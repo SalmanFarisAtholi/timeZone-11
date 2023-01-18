@@ -3,6 +3,7 @@ const users = require("../models/userdb");
 const category = require("../models/category");
 const adminHelpers = require("../helpers/adminHelpers");
 const order = require("../models/order");
+const coupon = require("../models/coupon");
 
 var adminEmail = process.env.adminEmail;
 var adminPassword = process.env.adminPassword;
@@ -225,11 +226,64 @@ module.exports = {
     );
     res.redirect("/admin/products");
   },
-  bannerManage: (req, res) => {
-    res.render("admin/banner_management");
-  },
   orderManage: async (req, res) => {
     const ord = await order.find();
     res.render("admin/order_management", { ord });
   },
+  coupenManage: async (req, res) => {
+    const coupens = await coupon.find({ status: { $not: { $eq: false } } });
+    res.render("admin/coupen_management", { coupens });
+  },
+  addCoupen: (req, res) => {
+    console.log(req.body);
+    const newCoupen = new coupon({
+      name: req.body.name,
+      discount: req.body.discount,
+      minCartAmount: req.body.minCartAmount,
+      startDate: req.body.startDate,
+      exDate: req.body.exDate,
+    });
+    newCoupen
+      .save()
+      .then((newOne) => {
+        console.log(newOne);
+        res.redirect("/admin/coupens");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  deleteCoupen: (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    adminHelpers.deleteCoupen(id).then(() => {
+      console.log("ooooooooooooooooo");
+
+      res.redirect("/admin/coupens");
+    });
+  },
+  editCoupen: async (req, res) => {
+    const id = req.params.id;
+
+    const oneCoupen = await coupon.findOne({ _id: id });
+    res.render("admin/edit_coupen", { oneCoupen });
+    console.log(oneCoupen);
+  },
+  postEditCoupen: async (req, res) => {
+    console.log(req.body);
+    const id = req.params.id;
+    await coupon.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: req.body.name,
+          discount: req.body.discount,
+          minCartAmount: req.body.minCartAmount,
+          startDate: req.body.startDate,
+          exDate: req.body.exDate,
+        },
+      }
+    );
+    res.redirect("/admin/coupens");
+  },  
 };

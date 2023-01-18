@@ -1,1 +1,46 @@
 <%- include('../partials/admin_header.ejs') %>
+
+<div class="container-fluid">
+    <div class="row" style="display: flex; justify-content: center;" >
+      <div class="col-lg-10">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">METHOD</th>
+              <th scope="col">TOTAL</th>
+              <th scope="col">STATUS</th>
+              <th style="width: 220px" scope="col">USER</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <%ord.forEach(function(order,indux){ %>
+  
+          <tbody>
+            <tr>
+              <th scope="row"><%=indux+1%></th>
+              <td><%=order.payment%></td>
+              <td><%=order.total%></td>
+              <td>
+              
+                      <select name="status" class="select">
+                        <option value="<%=order.status%>"><%=order.status%></option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Out for Delivary">Out for Delivary</option>
+                        <option value="Delivered">Delivered</option>
+
+                      </select>
+                    
+                </td>
+              <td><%=order.address%></td>
+              <td>
+                <a href="" class="btn_3">VIEW</a>
+              </td>
+            </tr>
+          </tbody>
+          <%}); %>
+        </table>
+      </div>
+    </div>
+  </div>

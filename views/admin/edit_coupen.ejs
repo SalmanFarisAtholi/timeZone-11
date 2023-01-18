@@ -1,0 +1,76 @@
+<div class="logo">
+  <a href="#"><img src="/assets/img/logo/logo.png" alt="" /></a>
+</div>
+
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Edit Coupen</h5>
+
+    
+    </div>
+
+    <form action="/admin/editCoupen/<%=oneCoupen._id%> " method="post" class="">
+      <div class="col-md-12 form-group p_star">
+        <input
+          type="name"
+          class="form-control"
+          id="name"
+          name="name"
+          value="<%=oneCoupen.name%>"
+          placeholder="Coupen Name"
+        />
+      </div>
+
+      <div class="col-md-12 form-group p_star">
+        <input
+          type="number"
+          class="form-control"
+          id="discount"
+          name="discount"
+          value="<%=oneCoupen.discount%>"
+          placeholder="Discount"
+        />
+      </div>
+      <div class="col-md-12 form-group p_star">
+        <input
+          type="number"
+          class="form-control"
+          id="minCartAmount"
+          name="minCartAmount"
+          value="<%=oneCoupen.minCartAmount%>"
+          placeholder="Min.Cart Amount"
+        />
+      </div>
+      <div class="col-md-12 ">
+      <p style="color: red;">You Must Select Dates</p>
+      </div>
+      <div class="col-md-12 form-group p_star">
+        <label for="">Start Date</label>
+        <input
+          type="date"
+          class="form-control"
+          id="startDate"
+          name="startDate"
+          value="<%=oneCoupen.startDate%>"
+          placeholder="StartDate"
+        />
+      </div>
+      <div class="col-md-12 form-group p_star">
+        <label for="">End Date</label>
+        <input
+          type="date"
+          class="form-control"
+          id="exDate"
+          name="exDate"
+          value="<%=oneCoupen.exDate%>"
+          placeholder="Expiry Date"
+        />
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Edit Coupen</button>
+      </div>
+    </form>
+  </div>
+</div>

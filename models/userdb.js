@@ -137,3 +137,4 @@ userSchema.methods.changeQty = async function (productId, qty, count, cb) {
 module.exports = Mongoose.model("users", userSchema);
 
 // module.exports = User = Mongoose.model('users', userSchema)
+ 

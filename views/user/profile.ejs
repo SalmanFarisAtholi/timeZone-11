@@ -16,12 +16,6 @@
             <p class="text-muted mb-1">TimeZone User</p>
             <div class="d-flex justify-content-center mb-2"></div>
           </div>
-          <a
-            style="display: flex; justify-content: center"
-            class="btn_1"
-            href="/addAddress/"
-            >ADD ADDRESS</a
-          >
         </div>
       </div>
       <div class="col-lg-8">
@@ -53,14 +47,15 @@
                 <p class="text-muted mb-0"><%=user.mobile%></p>
               </div>
             </div>
-            <hr />
-
-            <div class="row">
-              <div class="col-sm-3">
-                <p style="padding-right: 20px" class="mb-0">Address</p>
+            <br />
+            <div class="row col-lg-12">
+              <div class="card mb-2">
+                <a class="btn_1" href="/addAddress/">ADD ADDRESS</a>
               </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+              <div class="card mb-2">
+                <a class="btn_1" data-toggle="modal" data-target="#exampleModal"
+                  >CHANGE PASSWORD</a
+                >
               </div>
             </div>
           </div>
@@ -70,51 +65,104 @@
       <div class="col-lg-8">
         <div style="padding-left: 30px; padding-top: 10px" class="card mb-4">
           <div class="card-body">
-            <h5>SHIPPING ADDRESSES</h5> 
+            <h5>SHIPPING ADDRESSES</h5>
             <div class="row">
-              <% if (add){ %> 
-              <% add.address.forEach(function(el) { %>
+              <% if (add){ %> <% add.address.forEach(function(el) { %>
 
-                <div  class="card mb-4">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm-9">
-      
-                        <p class="text-muted mb-0">
-                          <%=el.fName%> <%=el.lName%>, <%=el.mob%>, <%=el.house%>,
-                          <%=el.landmark%> ,<%=el.city%>, <%=el.state%>,
-                          <%=el.district%>, <%=el.pincode%>
-                        </p>
-                        
-                        <!-- <a
-                        style="padding: 7px; width: 20px; height: auto; color: black"
-                        href="/editAddress/< %> "
-                      >
-                        <i class="bi bi-pen"></i
-                      ></a> -->
-                      
+              <div class="card mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%=el.fName%> <%=el.lName%>, <%=el.mob%>, <%=el.house%>,
+                        <%=el.landmark%> ,<%=el.city%>, <%=el.state%>,
+                        <%=el.district%>, <%=el.pincode%>
+                      </p>
+
                       <a
                         onclick="return confirm('Are you sure?')"
-                        style="padding: 7px; width: 20 px; height: auto; color: black"
+                        style="
+                          padding: 7px;
+                          width: 20 px;
+                          height: auto;
+                          color: black;
+                        "
                         href="/deleteAddress/<%=el._id %> "
                         ><i class="bi bi-trash"></i
                       ></a>
-                      </div>
                     </div>
                   </div>
                 </div>
-
-
-
-
-
-            
+              </div>
             </div>
-            <% }) %>
-            <% } %> 
+            <% }) %> <% } %>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Passwod</h5>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form action="/changePassword" method="post" class="">
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            value=""
+            placeholder="Old Password"
+          />
+        </div>
+
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="newPassword"
+            value=""
+            placeholder="New Password"
+          />
+        </div>
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="confirmPassword"
+            value=""
+            placeholder="Confirm Password"
+          />
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

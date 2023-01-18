@@ -10,8 +10,12 @@ const order = require("../models/order");
 // const {sendotp,verifyotp} = require("../uttilities/otp");
 
 module.exports = {
-  signup: (req, res) => {
-    res.render("user/signup");
+  signup: (req, res, next) => {
+    try {
+      res.render("user/signup");
+    } catch (e) {
+      next(new Error(e));
+    }
   },
   index: (req, res) => {
     res.render("index");
@@ -303,14 +307,34 @@ module.exports = {
   },
   cancelOrder: async (req, res) => {
     console.log(req.params);
-   const orderId=req.params
-  //  orderId.toString()
+    const orderId = req.params;
+    //  orderId.toString()
     await order.updateOne(
-      { _id: req.params.id},
-      { $set: { status:"canceled" } }
+      { _id: req.params.id },
+      { $set: { status: "canceled" } }
     );
-    console.log("req.params"); 
-    res.redirect('/orders')
+    console.log("req.params");
+    res.redirect("/orders");
+  },
+  changePassword: async (req, res) => {
+    const uzerId = req.session.user._id;
+    const oldPass = req.body.password;
+    const newPass = await bcrypt.hash(req.body.newPassword, 10);
+    const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
+    console.log(oldPass, "kooi", newPass, conPass);
+    let user = await users.findById({ _id: uzerId });
+    console.log(user);
+    bcrypt.compare(oldPass, user.password).then((status) => {
+      if (status) {
+        console.log("Password matched");
+       async()=>{
+       await users.findByIdAndUpdate(uzerId,{$set:{password:newPass},$set:{confirmPassword:conPass}})
+      }
+       console.log("very good");
+       res.redirect("/profile")
+      } else {
+        console.log("Password not match");
+      }
+    });
   },
 };
- 
