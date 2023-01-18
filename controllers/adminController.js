@@ -285,5 +285,8 @@ module.exports = {
       }
     );
     res.redirect("/admin/coupens");
-  },  
+  },
+  updateStatus:(req,res)=>{
+    adminHelpers.updateStatus(req,res)
+  }
 };

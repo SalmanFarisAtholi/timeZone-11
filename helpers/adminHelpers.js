@@ -2,7 +2,10 @@ const products = require("../models/product");
 const users = require("../models/userdb");
 const category = require("../models/category");
 const { response } = require("express");
+const order = require("../models/order");
+
 const coupen = require("../models/coupon");
+
 module.exports = {
   deleteCategory: (id) =>
     new Promise((resolve, reject) => {
@@ -29,6 +32,7 @@ module.exports = {
         resolve(response);
       });
     }),
+
   // editCategory:(id)=>
   //   new Promise((resolve,reject)=>{
   //     category.findOne({_id:id}).then((response)=>{
@@ -36,4 +40,24 @@ module.exports = {
   //     });    await users.findByIdAndUpdate(userId, { access: false });
 
   //   }),
+  updateStatus: (req, res) => {
+    console.log(" order id : ", req.body.orderId);
+    let newStatus = req.body.newStatus;
+    console.log(" new status: ", newStatus);
+    let orderId = req.body.orderId;
+    order.findOneAndUpdate(
+      { _id: orderId },
+      { $set: { status: newStatus } },
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          console.log(" new order status updation failed ! ", err);
+        } else {
+          console.log(" new order updation successful .. ");
+          console.log(doc);
+          res.json({ current_status: doc.orderStatus, status: true });
+        }
+      }
+    );
+  },
 };

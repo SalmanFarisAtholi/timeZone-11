@@ -86,6 +86,7 @@ userSchema.methods.removeFromCart=function (product) {
 
     cart.items.splice(isExisting,1);
    
+    cart.totalPrice=-product.price
     
     return this.save()  
   }

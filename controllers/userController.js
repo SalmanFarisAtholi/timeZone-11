@@ -267,10 +267,10 @@ module.exports = {
     let totalPrice = product.cart.totalPrice;
     console.log(totalPrice);
     if (body === "COD") {
-      var statuz = "placed";
+      var statuz = "Placed";
       res.json((response.status = true));
     } else {
-      var statuz = "pending";
+      var statuz = "Pending";
     }
     console.log(statuz);
     const newOrder = new order({
@@ -311,7 +311,7 @@ module.exports = {
     //  orderId.toString()
     await order.updateOne(
       { _id: req.params.id },
-      { $set: { status: "canceled" } }
+      { $set: { status: "Canceled" } }
     );
     console.log("req.params");
     res.redirect("/orders");
