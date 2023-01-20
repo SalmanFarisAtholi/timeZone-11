@@ -38,7 +38,7 @@
           <h3>Billing Details</h3>
           
           <form id="checkout_form">
-       <% if (add) {%> 
+            <% if (add) {%> 
           <% add.address.forEach(function(el) { %>
 
           <div style="padding-left: 30px; padding-top: 10px" class="card mb-4">
@@ -63,8 +63,14 @@
           <% }) %>
           <% } %> 
 
+
+
           <a class="btn_1" href="/addAddress/">ADD ADDRESS</a>
+
+    
         </div>
+     
+
 
         <div class="col-lg-4">
           <div class="order_box">
@@ -79,7 +85,7 @@
               <%user.cart.items.forEach(function(pro,count) {%>
 
               <li>
-                <a href="#"
+                <a 
                   ><%= pro.productId.name%>
                   <span  class="middle">x<%=pro.qty %> </span>
                   <span class="last"><%=pro.productId.price %> </span>
@@ -90,14 +96,14 @@
 
             <ul class="list list_2">
               <li>
-                <a href="#"
+                <a 
                   >Subtotal
                   <span>₹<%=user.cart.totalPrice%></span>
                 </a>
               </li>
               <li>
                 
-                <a href="#"
+                <a 
                   >Shipping
                   <span>₹50</span>
                 </a>
@@ -114,7 +120,7 @@
 
 
 
-              <div style="padding-top: 10px" class="payment_item">
+               <div style="padding-top: 10px" class="payment_item">
                   <div
                     style="
                       padding: 0px 25px 21px 25px;
@@ -186,7 +192,8 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-  <script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+   <script>
     $("#checkout_form").submit((e) => {
       e.preventDefault();
       let op = document.getElementsByClassName("payment_item");
@@ -196,9 +203,62 @@
         method: "post",
         data: $("#checkout_form").serialize(),
         success: (response) => {
-         window.location='/orderPlaced'
+          alert(response)
+          if(response){
+            console.log('here');
+           location.href='/orderPlaced'
+          }else{
+            razorpayPayment(response)
+          console.log("there");     
+          }
         },
       });
     });
+    function us (order){
+    var options = {
+    "key": "rzp_test_YtBWIaL5Gbfcit", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+
+        verifyPayent(response,order)
+    },
+    "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+    };
+    }
+    function verifyPayent(payment,order){
+      $.ajax({
+        url:'veifyPayment',
+        data:{
+          payment,
+          order
+        },
+        method:'post   '
+      })
+    }
+
+
+
+
+
+
   </script>
 </head>
+ 

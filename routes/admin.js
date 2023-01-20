@@ -31,7 +31,7 @@ const {
 } = require('../controllers/adminController')
 router.get('/',login)
 router.post('/',loginPost)
-router.get('/signout',signout)
+router.get('/signout',verifyAdmin,signout)
 router.get('/users',verifyAdmin,userManage)
 router.get('/categorys',verifyAdmin,categoryManage)
 router.get('/products',verifyAdmin,productManage)

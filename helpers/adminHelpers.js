@@ -33,13 +33,6 @@ module.exports = {
       });
     }),
 
-  // editCategory:(id)=>
-  //   new Promise((resolve,reject)=>{
-  //     category.findOne({_id:id}).then((response)=>{
-  //       resolve(response);
-  //     });    await users.findByIdAndUpdate(userId, { access: false });
-
-  //   }),
   updateStatus: (req, res) => {
     console.log(" order id : ", req.body.orderId);
     let newStatus = req.body.newStatus;

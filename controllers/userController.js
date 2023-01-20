@@ -247,11 +247,15 @@ module.exports = {
   },
 
   checkout: async (req, res) => {
+    try{
     const uzerId = req.session.user._id;
     const userz = await users.findOne({ _id: uzerId });
     const add = await address.findOne({ userId: uzerId });
     let user = await userz.populate("cart.items.productId");
     res.render("user/checkout", { user, add });
+    }catch (e){
+      console.log(e);
+    }
   },
   placeOrder: async (req, res) => {
     console.log("Place Order is running");
@@ -266,12 +270,25 @@ module.exports = {
     console.log(product.cart.items[0].productId, "koooi");
     let totalPrice = product.cart.totalPrice;
     console.log(totalPrice);
+    console.log(productIds);
     if (body === "COD") {
       var statuz = "Placed";
-      res.json((response.status = true));
+      console.log(statuz);
+      const newOrder = new order({
+        userId: uzerId,
+        date: new Date(),
+        total: totalPrice,
+        payment: body,
+        address: addId,
+        status: statuz,
+        products:productIds
+      });
+      newOrder.save();
+      res.json(response.st=true);
+
     } else {
       var statuz = "Pending";
-    }
+    
     console.log(statuz);
     const newOrder = new order({
       userId: uzerId,
@@ -280,23 +297,21 @@ module.exports = {
       payment: body,
       address: addId,
       status: statuz,
+      products:productIds
     });
     newOrder.save();
-    console.log(newOrder);
+    console.log(newOrder._id);
+    const newOrderId=newOrder._id
+     userHelpers.generateRazorpay(newOrderId,totalPrice).then((response)=>{
+    
+      console.log(response);
+      res.json(response)
+     })
+     
+    }
 
-    // const proId = req.params.id;
-    // const userId = req.session.user._id;
-    // const userz = await users.findOne({ _id: userId });
-    // console.log(proId);
-    // userz
-    //   .removeFromCart(proId)
-    //   .then(() => {
-    //     res.redirect("/cart");
-    //   })
-    //   .catch((err) => console.log(err));
   },
   orders: async (req, res) => {
-    console.log("order..order!!!");
     const uzerId = req.session.user._id;
     console.log(uzerId);
     const orde = await order.find({ userId: uzerId });
@@ -328,7 +343,7 @@ module.exports = {
       if (status) {
         console.log("Password matched");
        async()=>{
-       await users.findByIdAndUpdate(uzerId,{$set:{password:newPass},$set:{confirmPassword:conPass}})
+       await users.findByIdAndUpdate(uzerId,{$set:{password:newPass,confirmPassword:conPass}})
       }
        console.log("very good");
        res.redirect("/profile")

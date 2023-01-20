@@ -86,7 +86,6 @@ userSchema.methods.removeFromCart=function (product) {
 
     cart.items.splice(isExisting,1);
    
-    cart.totalPrice=-product.price
     
     return this.save()  
   }
@@ -138,4 +137,3 @@ userSchema.methods.changeQty = async function (productId, qty, count, cb) {
 module.exports = Mongoose.model("users", userSchema);
 
 // module.exports = User = Mongoose.model('users', userSchema)
- 

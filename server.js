@@ -55,7 +55,7 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("combined"));
+app.use(morgan("dev"));
 app.use(
   multer({ storage: fileStorage, fileFilter }).fields([
     { name: "img" },
