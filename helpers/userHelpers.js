@@ -4,6 +4,7 @@ const users = require("../models/userdb");
 const product = require("../models/product");
 const order = require("../models/order");
 const Razorpay = require("razorpay");
+const { resolve } = require("path");
 
 var instance = new Razorpay({
   key_id: "rzp_test_YtBWIaL5Gbfcit",
@@ -41,13 +42,14 @@ module.exports = {
     category = await category.find({ access: true });
     return;
   },
+
   generateRazorpay: (orderId, totalPrice) => {
     console.log(orderId);
     return new Promise((resolve, reject) => {
       var options = {
-        amount: totalPrice, // amount in the smallest currency unit
+        amount: totalPrice*100, // amount in the smallest currency unit
         currency: "INR",
-        receipt:""+orderId
+        receipt: "" + orderId,
       };
       instance.orders.create(options, function (err, order) {
         if (err) {
@@ -57,6 +59,37 @@ module.exports = {
           resolve(order);
         }
       });
+    });
+  },
+
+  verifyPayment: (detailes) => {
+    return new Promise((resolve, reject) => {
+      var crypto = require("crypto");
+
+      var hmac = crypto.createHmac("sha256", "P8HtSCsSWyNPJ41Kp4eQKgfa");
+      hmac.update(
+        detailes.payment.razorpay_order_id +
+          "|" +
+          detailes.payment.razorpay_payment_id
+      );
+      hmac = hmac.digest("hex");
+      if (hmac == detailes.payment.razorpay_signature) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  },
+  changePaymentStatus: (orderId) => {
+    console.log(orderId+'koi');
+    return new Promise((resolve, reject) => {
+      console.log("Status Change running");
+      order
+        .findByIdAndUpdate({_id:orderId}, { $set: { status: "Placed" } })
+        .then(() => {
+          console.log("Database changed");
+          resolve();
+        });
     });
   },
 };

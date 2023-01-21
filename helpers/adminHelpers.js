@@ -32,25 +32,25 @@ module.exports = {
         resolve(response);
       });
     }),
-
-  updateStatus: (req, res) => {
-    console.log(" order id : ", req.body.orderId);
-    let newStatus = req.body.newStatus;
-    console.log(" new status: ", newStatus);
-    let orderId = req.body.orderId;
-    order.findOneAndUpdate(
-      { _id: orderId },
-      { $set: { status: newStatus } },
-      { new: true },
-      (err, doc) => {
-        if (err) {
-          console.log(" new order status updation failed ! ", err);
-        } else {
-          console.log(" new order updation successful .. ");
-          console.log(doc);
-          res.json({ current_status: doc.orderStatus, status: true });
+    updateStatus: (req, res) => {
+      console.log(" order id : ", req.body.orderId);
+      let newStatus = req.body.newStatus;
+      console.log(" new status: ", newStatus);
+      let orderId = req.body.orderId;
+      order.findOneAndUpdate(
+        { _id: orderId },
+        { $set: { status: newStatus } },
+        { new: true },
+        (err, doc) => {
+          if (err) {
+            console.log(" new order status updation failed ! ", err);
+          } else {
+            console.log(" new order updation successful .. ");
+            console.log(doc);
+            res.json({ current_status: doc.orderStatus, status: true });
+          }
         }
-      }
-    );
-  },
+      );
+    },
+
 };

@@ -13,7 +13,26 @@
             />
 
             <h5 class="my-3"><%=user.name %></h5>
-            <p class="text-muted mb-1">TimeZone User</p>
+            <a class="tp_btn1" href="">Log Out</a>
+            <style>
+              .tp_btn1 {
+                border: 1px solid #eeeeee;
+                display: inline-block;
+                line-height: 38px;
+                padding: 0px 40px;
+                color: #000000;
+                text-transform: capitalize;
+                font-family: "Playfair Display", serif;
+                font-weight: 500;
+                border-radius: 50px;
+              }
+
+              .tp_btn1:hover {
+                background: #d91009;
+                color: #fff;
+                border-color: #e91515;
+              }
+            </style>
             <div class="d-flex justify-content-center mb-2"></div>
           </div>
         </div>
@@ -50,15 +69,14 @@
             <br />
             <div class="row col-lg-12">
               <!-- <div class="card mb-2"> -->
-                <a class="tp_btn" href="/addAddress/">Add Address</a>
+              <a class="tp_btn" href="/addAddress/">Add Address</a>
               <!-- </div> -->
               <!-- <div class="card mb-2"> -->
-                <a class="tp_btn" data-toggle="modal" data-target="#exampleModal"
-                  >Change Password</a
-                >
+              <a class="tp_btn" data-toggle="modal" data-target="#exampleModal"
+                >Change Password</a
+              >
               <!-- </div> -->
               <a class="tp_btn" href="/orders">Your Orders</a>
-
             </div>
           </div>
         </div>

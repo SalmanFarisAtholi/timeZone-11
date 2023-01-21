@@ -30,7 +30,9 @@ const {
     orders,
     orderedPage,
     cancelOrder,
-    changePassword
+    changePassword,
+    verifyPayment,
+    paymentSuccess
 } = require ('../controllers/userController')
 const product = require('../models/product')
 
@@ -59,8 +61,10 @@ router.post('/postAddress',verifyUser,postAddAddress)
 router.get('/deleteAddress/:id',verifyUser,deleteAddress)
 router.get('/checkout',verifyUser,checkout)
 router.post('/placeOrder',verifyUser,placeOrder)
+router.post('/veifyPayment',verifyPayment)
 router.get('/orders',verifyUser,orders)
 router.get('/orderPlaced',verifyUser,orderedPage)
+router.get('/paymentSuccess',verifyUser,paymentSuccess)
 router.get('/cancelOrder/:id',verifyUser,cancelOrder)
 router.post('/changePassword',verifyUser,changePassword)
 

@@ -247,13 +247,13 @@ module.exports = {
   },
 
   checkout: async (req, res) => {
-    try{
-    const uzerId = req.session.user._id;
-    const userz = await users.findOne({ _id: uzerId });
-    const add = await address.findOne({ userId: uzerId });
-    let user = await userz.populate("cart.items.productId");
-    res.render("user/checkout", { user, add });
-    }catch (e){
+    try {
+      const uzerId = req.session.user._id;
+      const userz = await users.findOne({ _id: uzerId });
+      const add = await address.findOne({ userId: uzerId });
+      let user = await userz.populate("cart.items.productId");
+      res.render("user/checkout", { user, add });
+    } catch (e) {
       console.log(e);
     }
   },
@@ -277,39 +277,35 @@ module.exports = {
       const newOrder = new order({
         userId: uzerId,
         date: new Date(),
-        total: totalPrice,
+        total: totalPrice + 50,
         payment: body,
         address: addId,
         status: statuz,
-        products:productIds
+        products: productIds,
       });
       newOrder.save();
-      res.json(response.st=true);
-
+      res.json({ codSucces: true });
     } else {
       var statuz = "Pending";
-    
-    console.log(statuz);
-    const newOrder = new order({
-      userId: uzerId,
-      date: new Date(),
-      total: totalPrice,
-      payment: body,
-      address: addId,
-      status: statuz,
-      products:productIds
-    });
-    newOrder.save();
-    console.log(newOrder._id);
-    const newOrderId=newOrder._id
-     userHelpers.generateRazorpay(newOrderId,totalPrice).then((response)=>{
-    
-      console.log(response);
-      res.json(response)
-     })
-     
-    }
 
+      console.log(statuz);
+      const newOrder = new order({
+        userId: uzerId,
+        date: new Date(),
+        total: totalPrice + 50,
+        payment: body,
+        address: addId,
+        status: statuz,
+        products: productIds,
+      });
+      newOrder.save();
+      console.log(newOrder._id);
+      const newOrderId = newOrder._id;
+      userHelpers.generateRazorpay(newOrderId, totalPrice).then((response) => {
+        console.log(response);
+        res.json(response);
+      });
+    }
   },
   orders: async (req, res) => {
     const uzerId = req.session.user._id;
@@ -342,14 +338,40 @@ module.exports = {
     bcrypt.compare(oldPass, user.password).then((status) => {
       if (status) {
         console.log("Password matched");
-       async()=>{
-       await users.findByIdAndUpdate(uzerId,{$set:{password:newPass,confirmPassword:conPass}})
-      }
-       console.log("very good");
-       res.redirect("/profile")
+        async () => {
+          await users.findByIdAndUpdate(uzerId, {
+            $set: { password: newPass, confirmPassword: conPass },
+          });
+        };
+        console.log("very good");
+        res.redirect("/profile");
       } else {
         console.log("Password not match");
       }
     });
   },
+  verifyPayment: (req, res) => {
+    console.log("VerifyPayment running");
+    const body = req.body;
+
+    userHelpers
+      .verifyPayment(body)
+      .then(() => {
+        console.log(body.order.receipt);
+        console.log(req.body);
+        var orderId = body.order.receipt;
+
+        userHelpers.changePaymentStatus(orderId).then(() => {
+          console.log("Payment successful");
+          res.json({ status: true });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json({ status: false });
+      });
+  },
+  paymentSuccess:(req,res)=>{
+    res.render("user/payment_success")
+  }
 };

@@ -170,7 +170,7 @@
                     <label for="RazorPay">RazorPay</label>
                   </div>
                   <p>
-                    Please check shipping Address and Product Details Before
+                    Please check your shipping Address and Product Details Before
                     Place Order
                   </p>
                 </div>
@@ -203,30 +203,31 @@
         method: "post",
         data: $("#checkout_form").serialize(),
         success: (response) => {
-          alert(response)
-          if(response){
+          // alert(response)
+          if(response.codSucces){
             console.log('here');
            location.href='/orderPlaced'
           }else{
             razorpayPayment(response)
-          console.log("there");     
+          console.log("there");    
+          console.log(response); 
           }
         },
       });
     });
-    function us (order){
+    function razorpayPayment(order){
     var options = {
     "key": "rzp_test_YtBWIaL5Gbfcit", // Enter the Key ID generated from the Dashboard
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",
-    "name": "Acme Corp",
+    "name": "Time Zone",
     "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
+    "image": "/assets/img/logo/logo.png",
     "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature)
 
         verifyPayent(response,order)
     },
@@ -242,15 +243,28 @@
         "color": "#3399cc"
     }
     };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+
     }
     function verifyPayent(payment,order){
       $.ajax({
-        url:'veifyPayment',
+        url:'/veifyPayment',
         data:{
           payment,
           order
         },
-        method:'post   '
+        dataType:"json",
+        method:'post',
+        success:(response)=>{
+          if(response.status){
+            location.href='/paymentSuccess'
+          
+          }else{
+            
+            alert("payment failed")
+          }
+        }
       })
     }
 
