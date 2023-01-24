@@ -23,7 +23,7 @@ module.exports = {
   login: (req, res) => {
     res.render("user/login");
   },
-  home: async (req, res) => {
+  home: async (req, res, next) => {
     try {
       const products = await product.find({ access: true });
       res.render("user/home", { products });
@@ -32,7 +32,7 @@ module.exports = {
       next(error);
     }
   },
-  shop: async (req, res) => {
+  shop: async (req, res, next) => {
     try {
       const products = await product.find({ access: true });
       res.render("user/shop", { products });
@@ -41,7 +41,7 @@ module.exports = {
       next(error);
     }
   },
-  sign: async (req, res) => {
+  sign: async (req, res, next) => {
     try {
       const pass = await bcrypt.hash(req.body.password, 10);
       const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
@@ -67,7 +67,7 @@ module.exports = {
       next(error);
     }
   },
-  postLogin: (req, res) => {
+  postLogin: (req, res, next) => {
     try {
       const email = req.body.email;
       const password = req.body.password;
@@ -89,7 +89,7 @@ module.exports = {
       next(error);
     }
   },
-  signout: (req, res) => {
+  signout: (req, res, next) => {
     try {
       req.session.user = null;
       // user=false
@@ -100,7 +100,7 @@ module.exports = {
       next(error);
     }
   },
-  productDetails: async (req, res) => {
+  productDetails: async (req, res, next) => {
     try {
       const proId = req.params.id;
       const oneProduct = await product.findById({ _id: proId });
@@ -111,7 +111,7 @@ module.exports = {
       next(error);
     }
   },
-  addToCart: async (req, res) => {
+  addToCart: async (req, res, next) => {
     try {
       console.log(req.params.id);
       const id = req.params.id;
@@ -129,7 +129,7 @@ module.exports = {
       next(error);
     }
   },
-  cart: async (req, res) => {
+  cart: async (req, res, next) => {
     try {
       const userId = req.session.user._id;
 
@@ -145,7 +145,7 @@ module.exports = {
       next(error);
     }
   },
-  deleteCart: async (req, res) => {
+  deleteCart: async (req, res, next) => {
     try {
       const proId = req.params.id;
       const userId = req.session.user._id;
@@ -159,7 +159,7 @@ module.exports = {
       next(error);
     }
   },
-  viewWishList: async (req, res) => {
+  viewWishList: async (req, res, next) => {
     try {
       let users = req.session.user;
       let id = req.session.user._id.toString();
@@ -180,7 +180,7 @@ module.exports = {
       next(error);
     }
   },
-  doAddToWishlist: async (req, res) => {
+  doAddToWishlist: async (req, res, next) => {
     try {
       const usser = req.session.user;
       console.log("hi");
@@ -220,7 +220,7 @@ module.exports = {
     }
   },
 
-  deleteWishlist: async (req, res) => {
+  deleteWishlist: async (req, res, next) => {
     try {
       const proId = req.params.id;
       let userId = req.session.user._id;
@@ -236,7 +236,7 @@ module.exports = {
       next(error);
     }
   },
-  userProfile: async (req, res) => {
+  userProfile: async (req, res, next) => {
     try {
       let id = req.session.user._id;
       let user = req.session.user;
@@ -250,7 +250,7 @@ module.exports = {
       next(error);
     }
   },
-  changeQuantity: async (req, res) => {
+  changeQuantity: async (req, res, next) => {
     try {
       console.log("good boy");
       let user = req.session.user;
@@ -273,7 +273,7 @@ module.exports = {
   addAddress: (req, res) => {
     res.render("user/add_address");
   },
-  postAddAddress: async (req, res) => {
+  postAddAddress: async (req, res, next) => {
     try {
       let user = req.session.user._id;
       console.log(user);
@@ -307,7 +307,7 @@ module.exports = {
       next(error);
     }
   },
-  deleteAddress: async (req, res) => {
+  deleteAddress: async (req, res, next) => {
     try {
       console.log(req.params);
       const addressId = req.params.id;
@@ -324,7 +324,7 @@ module.exports = {
     }
   },
 
-  checkout: async (req, res) => {
+  checkout: async (req, res, next) => {
     try {
       const uzerId = req.session.user._id;
       const userz = await users.findOne({ _id: uzerId });
@@ -336,7 +336,7 @@ module.exports = {
       next(error);
     }
   },
-  placeOrder: async (req, res) => {
+  placeOrder: async (req, res, next) => {
     try {
       console.log("Place Order is running");
       console.log(req.body);
@@ -393,7 +393,7 @@ module.exports = {
       next(error);
     }
   },
-  orders: async (req, res) => {
+  orders: async (req, res, next) => {
     try {
       const uzerId = req.session.user._id;
       console.log(uzerId);
@@ -407,7 +407,7 @@ module.exports = {
   orderedPage: (req, res) => {
     res.render("user/orderPlaced");
   },
-  cancelOrder: async (req, res) => {
+  cancelOrder: async (req, res, next) => {
     try {
       console.log(req.params);
       const orderId = req.params;
@@ -423,7 +423,7 @@ module.exports = {
       next(error);
     }
   },
-  changePassword: async (req, res) => {
+  changePassword: async (req, res, next) => {
     try {
       const uzerId = req.session.user._id;
       const oldPass = req.body.password;
@@ -451,7 +451,7 @@ module.exports = {
       next(error);
     }
   },
-  verifyPayment: (req, res) => {
+  verifyPayment: (req, res, next) => {
     try {
       console.log("VerifyPayment running");
       const body = req.body;
@@ -480,7 +480,7 @@ module.exports = {
   paymentSuccess: (req, res) => {
     res.render("user/payment_success");
   },
-  viewOrder: async (req, res) => {
+  viewOrder: async (req, res, next) => {
     try {
       console.log("view order is running");
       const orderId = req.params.id;
