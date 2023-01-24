@@ -81,12 +81,9 @@ userSchema.methods.removeFromCart=function (product) {
   );
   console.log(isExisting+'ivideeeeeeeeeeeee');
   if (isExisting>=0) {
-    console.log(product.price+'my');
-    console.log(cart.totalPrice+'hhhhhhhhhhhhhhh');
 
     cart.items.splice(isExisting,1);
    
-    
     return this.save()  
   }
 }

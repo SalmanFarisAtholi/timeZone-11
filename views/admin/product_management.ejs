@@ -1,7 +1,7 @@
 <%- include('../partials/admin_header.ejs') %>
 
 <div class="container">
-  <table  class="table table-striped">
+  <table id="protable"  class="table table-striped">
     <thead style="color: greenyellow">
       <tr>
         <th class="p-4" scope="col"><h5>No</h5></th>
@@ -42,7 +42,12 @@
     </tbody>
   </table>
 </div>
+<script>
+  $(document).ready( function () {
+    $('#protable').DataTable();
+} );
 
+</script>
 
 <!-- //   Swal.fire({
 //   title: 'Are you sure?',

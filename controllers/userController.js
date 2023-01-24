@@ -14,7 +14,7 @@ module.exports = {
     try {
       res.render("user/signup");
     } catch (e) {
-      next(new Error(e));
+      next(e);
     }
   },
   index: (req, res) => {
@@ -24,226 +24,304 @@ module.exports = {
     res.render("user/login");
   },
   home: async (req, res) => {
-    const products = await product.find({ access: true });
-    res.render("user/home", { products });
+    try {
+      const products = await product.find({ access: true });
+      res.render("user/home", { products });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   shop: async (req, res) => {
-    const products = await product.find({ access: true });
-    res.render("user/shop", { products });
+    try {
+      const products = await product.find({ access: true });
+      res.render("user/shop", { products });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   sign: async (req, res) => {
-    const pass = await bcrypt.hash(req.body.password, 10);
-    const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
-    console.log(req.body);
-    const user = new users({
-      name: req.body.name,
-      password: pass,
-      confirmPassword: conPass,
-      mobile: req.body.mobile,
-      email: req.body.email,
-    });
-    //  sendotp(req.body.mobile)
-    user.save((error, doc) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(doc);
-      }
-    });
-    res.redirect("/login");
+    try {
+      const pass = await bcrypt.hash(req.body.password, 10);
+      const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
+      console.log(req.body);
+      const user = new users({
+        name: req.body.name,
+        password: pass,
+        confirmPassword: conPass,
+        mobile: req.body.mobile,
+        email: req.body.email,
+      });
+      //  sendotp(req.body.mobile)
+      user.save((error, doc) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(doc);
+        }
+      });
+      res.redirect("/login");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   postLogin: (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    console.log(email);
-    console.log(password);
-    userHelpers.doLogin(req.body).then((response) => {
-      if (response.status) {
-        req.session.loggedIn = response;
-        req.session.user = response.user;
-        res.render("user/home");
-      } else {
-        req.session.loggedError = true;
-        res.redirect("/login");
-      }
-    });
+    try {
+      const email = req.body.email;
+      const password = req.body.password;
+      console.log(email);
+      console.log(password);
+      userHelpers.doLogin(req.body).then((response) => {
+        if (response.status) {
+          req.session.loggedIn = response;
+          req.session.user = response.user;
+          console.log(req.session);
+          res.render("user/home");
+        } else {
+          req.session.loggedError = true;
+          res.redirect("/login");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   signout: (req, res) => {
-    req.session.user = null;
-    // user=false
-    res.redirect("/login");
-    console.log("hhhhhhhhhhhhhhhiiiiiiiiiiiiiii");
+    try {
+      req.session.user = null;
+      // user=false
+      res.redirect("/login");
+      console.log("hhhhhhhhhhhhhhhiiiiiiiiiiiiiii");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
-  productDetails: (req, res) => {
-    console.log("brooo");
-    res.render("user/product_details");
+  productDetails: async (req, res) => {
+    try {
+      const proId = req.params.id;
+      const oneProduct = await product.findById({ _id: proId });
+      console.log(oneProduct);
+      res.render("user/product_details", { oneProduct });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   addToCart: async (req, res) => {
-    console.log(req.params.id);
-    const id = req.params.id;
-    console.log(req.session.user);
-    const userId = req.session.user._id;
-    const userz = await users.findOne({ _id: userId });
-    await product
-      .findById({ _id: id })
-      .then((product) => {
+    try {
+      console.log(req.params.id);
+      const id = req.params.id;
+      console.log(req.session.user);
+      const userId = req.session.user._id;
+      const userz = await users.findOne({ _id: userId });
+      await product.findById({ _id: id }).then((product) => {
         console.log(product);
         userz.addToCart(product).then((result) => {
           res.redirect("/cart");
         });
-      })
-      .catch((err) => console.log(err));
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   cart: async (req, res) => {
-    const userId = req.session.user._id;
+    try {
+      const userId = req.session.user._id;
 
-    const userz = await users.findOne({ _id: userId });
-    console.log("newwwwwwww", userz);
+      const userz = await users.findOne({ _id: userId });
+      console.log("newwwwwwww", userz);
 
-    let user = await userz.populate("cart.items.productId");
+      let user = await userz.populate("cart.items.productId");
 
-    console.log("userrrrr", user);
-    res.render("user/cart", { user });
+      console.log("userrrrr", user);
+      res.render("user/cart", { user });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   deleteCart: async (req, res) => {
-    const proId = req.params.id;
-    const userId = req.session.user._id;
-    const userz = await users.findOne({ _id: userId });
-    console.log(proId);
-    userz
-      .removeFromCart(proId)
-      .then(() => {
+    try {
+      const proId = req.params.id;
+      const userId = req.session.user._id;
+      const userz = await users.findOne({ _id: userId });
+      console.log(proId);
+      userz.removeFromCart(proId).then(() => {
         res.redirect("/cart");
-      })
-      .catch((err) => console.log(err));
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   viewWishList: async (req, res) => {
-    let users = req.session.user;
-    let id = req.session.user._id.toString();
-    // console.log(id);
-    const prd = await wishlist.findOne({ userId: id }).populate("productItems");
+    try {
+      let users = req.session.user;
+      let id = req.session.user._id.toString();
+      // console.log(id);
+      const prd = await wishlist
+        .findOne({ userId: id })
+        .populate("productItems");
 
-    let count = null;
-    if (users) {
-      count = users.cart.items.length;
+      let count = null;
+      if (users) {
+        count = users.cart.items.length;
+      }
+      console.log(prd);
+      console.log(users);
+      res.render("user/wishlist", { users, prd, count });
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
-    console.log(prd);
-    console.log(users);
-    res.render("user/wishlist", { users, prd, count });
   },
   doAddToWishlist: async (req, res) => {
-    const usser = req.session.user;
-    console.log("hi");
-    let id = req.session.user._id;
-    const products = req.params.id;
-    console.log("lllllllllllll", products);
-    const wish = await wishlist.findOne({ userId: id });
-    if (wish) {
-      // console.log('und');
-      wish.addToWishlist(products, async (response) => {
-        const proDt = await wishlist
-          .find({ userId: id }, { productItems: 1, _id: 0 })
-          .populate("productItems");
-        if (response.status) {
-          console.log("entered ");
-          res.redirect("/wishlist");
-        } else {
-          res.redirect("/shop");
-        }
-      });
-    } else {
-      const newWishlist = new wishlist({
-        userId: id,
-        productId: products,
-      });
-      newWishlist.save((err, doc) => {
-        if (doc) {
-          res.redirect("/wishlist");
-        } else {
-          res.redirect("/shop");
-        }
-      });
+    try {
+      const usser = req.session.user;
+      console.log("hi");
+      let id = req.session.user._id;
+      const products = req.params.id;
+      console.log("lllllllllllll", products);
+      const wish = await wishlist.findOne({ userId: id });
+      if (wish) {
+        // console.log('und');
+        wish.addToWishlist(products, async (response) => {
+          const proDt = await wishlist
+            .find({ userId: id }, { productItems: 1, _id: 0 })
+            .populate("productItems");
+          if (response.status) {
+            console.log("entered ");
+            res.redirect("/wishlist");
+          } else {
+            res.redirect("/shop");
+          }
+        });
+      } else {
+        const newWishlist = new wishlist({
+          userId: id,
+          productId: products,
+        });
+        newWishlist.save((err, doc) => {
+          if (doc) {
+            res.redirect("/wishlist");
+          } else {
+            res.redirect("/shop");
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   },
 
   deleteWishlist: async (req, res) => {
-    const proId = req.params.id;
-    let userId = req.session.user._id;
-    console.log(proId, "hiii", userId);
-    await wishlist.findOneAndUpdate(
-      { userId: userId },
-      { $pull: { productItems: proId } },
-      { new: true }
-    );
-    res.redirect("/wishlist");
+    try {
+      const proId = req.params.id;
+      let userId = req.session.user._id;
+      console.log(proId, "hiii", userId);
+      await wishlist.findOneAndUpdate(
+        { userId: userId },
+        { $pull: { productItems: proId } },
+        { new: true }
+      );
+      res.redirect("/wishlist");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   userProfile: async (req, res) => {
-    let id = req.session.user._id;
-    let user = req.session.user;
+    try {
+      let id = req.session.user._id;
+      let user = req.session.user;
 
-    const add = await address.findOne({ userId: id });
-    console.log("user profile");
+      const add = await address.findOne({ userId: id });
+      console.log("user profile");
 
-    res.render("user/profile", { user, add });
+      res.render("user/profile", { user, add });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   changeQuantity: async (req, res) => {
-    console.log("good boy");
-    let user = req.session.user;
-    const userz = await users.findOne(user);
-    userz.changeQty(
-      req.body.productId,
-      req.body.qty,
-      req.body.count,
-      (response) => {
-        response.access = true;
-        console.log(response);
-        res.json(response);
-      }
-    );
+    try {
+      console.log("good boy");
+      let user = req.session.user;
+      const userz = await users.findOne(user);
+      userz.changeQty(
+        req.body.productId,
+        req.body.qty,
+        req.body.count,
+        (response) => {
+          response.access = true;
+          console.log(response);
+          res.json(response);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   addAddress: (req, res) => {
     res.render("user/add_address");
   },
   postAddAddress: async (req, res) => {
-    let user = req.session.user._id;
-    console.log(user);
-    const add = await address.findOne({ userId: user });
-    if (add) {
-      await address.updateOne(
-        { userId: user },
-        { $push: { address: req.body } }
-      );
-      res.status(200);
-      // .json({status:true})
-    } else {
-      req.body.status = true;
-      const ad = new address({
-        address: [req.body],
-        userId: user,
-      });
-      ad.save((err, doc) => {
-        if (err) {
-          console.log(err);
-          res.redirect("/profile");
-        } else {
-          console.log(doc);
-          // res.json({status:true})
-        }
-      });
+    try {
+      let user = req.session.user._id;
+      console.log(user);
+      const add = await address.findOne({ userId: user });
+      if (add) {
+        await address.updateOne(
+          { userId: user },
+          { $push: { address: req.body } }
+        );
+        res.status(200);
+        // .json({status:true})
+      } else {
+        req.body.status = true;
+        const ad = new address({
+          address: [req.body],
+          userId: user,
+        });
+        ad.save((err, doc) => {
+          if (err) {
+            console.log(err);
+            res.redirect("/profile");
+          } else {
+            console.log(doc);
+            // res.json({status:true})
+          }
+        });
+      }
+      res.redirect("/profile");
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
-    res.redirect("/profile");
   },
   deleteAddress: async (req, res) => {
-    console.log(req.params);
-    const addressId = req.params.id;
-    let user = req.session.user._id;
-    console.log(user);
+    try {
+      console.log(req.params);
+      const addressId = req.params.id;
+      let user = req.session.user._id;
+      console.log(user);
 
-    address
-      .updateOne({ userId: user }, { $pull: { address: { _id: addressId } } })
-      .then(() => console.log("Deleted"))
-      .catch((er) => console.log(er));
-    res.redirect("/profile");
+      address
+        .updateOne({ userId: user }, { $pull: { address: { _id: addressId } } })
+        .then(() => console.log("Deleted"));
+      res.redirect("/profile");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
 
   checkout: async (req, res) => {
@@ -253,125 +331,166 @@ module.exports = {
       const add = await address.findOne({ userId: uzerId });
       let user = await userz.populate("cart.items.productId");
       res.render("user/checkout", { user, add });
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   },
   placeOrder: async (req, res) => {
-    console.log("Place Order is running");
-    console.log(req.body);
-    const uzerId = req.session.user._id;
-    const userz = await users.findOne({ _id: uzerId });
-    let product = await userz.populate("cart.items.productId");
-    var body = req.body.payment.toString();
-    var addId = req.body.selector;
-    console.log(addId);
-    let productIds = product.cart.items;
-    console.log(product.cart.items[0].productId, "koooi");
-    let totalPrice = product.cart.totalPrice;
-    console.log(totalPrice);
-    console.log(productIds);
-    if (body === "COD") {
-      var statuz = "Placed";
-      console.log(statuz);
-      const newOrder = new order({
-        userId: uzerId,
-        date: new Date(),
-        total: totalPrice + 50,
-        payment: body,
-        address: addId,
-        status: statuz,
-        products: productIds,
-      });
-      newOrder.save();
-      res.json({ codSucces: true });
-    } else {
-      var statuz = "Pending";
+    try {
+      console.log("Place Order is running");
+      console.log(req.body);
+      const uzerId = req.session.user._id;
+      const userz = await users.findOne({ _id: uzerId });
+      let product = await userz.populate("cart.items.productId");
+      var body = req.body.payment.toString();
+      var addId = req.body.selector;
+      console.log(addId);
+      let productIds = product.cart.items;
+      console.log(product.cart.items[0].productId, "koooi");
+      let totalPrice = product.cart.totalPrice;
+      console.log(totalPrice);
+      console.log(productIds);
+      if (body === "COD") {
+        var statuz = "Placed";
+        console.log(statuz);
+        const newOrder = new order({
+          userId: uzerId,
+          date: new Date(),
+          total: totalPrice + 50,
+          payment: body,
+          address: addId,
+          status: statuz,
+          products: productIds,
+        });
+        newOrder.save();
+        res.json({ codSucces: true });
+      } else {
+        var statuz = "Pending";
 
-      console.log(statuz);
-      const newOrder = new order({
-        userId: uzerId,
-        date: new Date(),
-        total: totalPrice + 50,
-        payment: body,
-        address: addId,
-        status: statuz,
-        products: productIds,
-      });
-      newOrder.save();
-      console.log(newOrder._id);
-      const newOrderId = newOrder._id;
-      userHelpers.generateRazorpay(newOrderId, totalPrice).then((response) => {
-        console.log(response);
-        res.json(response);
-      });
+        console.log(statuz);
+        const newOrder = new order({
+          userId: uzerId,
+          date: new Date(),
+          total: totalPrice + 50,
+          payment: body,
+          address: addId,
+          status: statuz,
+          products: productIds,
+        });
+        newOrder.save();
+        console.log(newOrder._id);
+        const newOrderId = newOrder._id;
+        userHelpers
+          .generateRazorpay(newOrderId, totalPrice)
+          .then((response) => {
+            console.log(response);
+            res.json(response);
+          });
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   },
   orders: async (req, res) => {
-    const uzerId = req.session.user._id;
-    console.log(uzerId);
-    const orde = await order.find({ userId: uzerId });
-    res.render("user/orders", { orde });
+    try {
+      const uzerId = req.session.user._id;
+      console.log(uzerId);
+      const orde = await order.find({ userId: uzerId });
+      res.render("user/orders", { orde });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   orderedPage: (req, res) => {
     res.render("user/orderPlaced");
   },
   cancelOrder: async (req, res) => {
-    console.log(req.params);
-    const orderId = req.params;
-    //  orderId.toString()
-    await order.updateOne(
-      { _id: req.params.id },
-      { $set: { status: "Canceled" } }
-    );
-    console.log("req.params");
-    res.redirect("/orders");
+    try {
+      console.log(req.params);
+      const orderId = req.params;
+      //  orderId.toString()
+      await order.updateOne(
+        { _id: req.params.id },
+        { $set: { status: "Canceled" } }
+      );
+      console.log("req.params");
+      res.redirect("/orders");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   changePassword: async (req, res) => {
-    const uzerId = req.session.user._id;
-    const oldPass = req.body.password;
-    const newPass = await bcrypt.hash(req.body.newPassword, 10);
-    const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
-    console.log(oldPass, "kooi", newPass, conPass);
-    let user = await users.findById({ _id: uzerId });
-    console.log(user);
-    bcrypt.compare(oldPass, user.password).then((status) => {
-      if (status) {
-        console.log("Password matched");
-        async () => {
-          await users.findByIdAndUpdate(uzerId, {
-            $set: { password: newPass, confirmPassword: conPass },
-          });
-        };
-        console.log("very good");
-        res.redirect("/profile");
-      } else {
-        console.log("Password not match");
-      }
-    });
+    try {
+      const uzerId = req.session.user._id;
+      const oldPass = req.body.password;
+      const newPass = await bcrypt.hash(req.body.newPassword, 10);
+      const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
+      console.log(oldPass, "kooi", newPass, conPass);
+      let user = await users.findById({ _id: uzerId });
+      console.log(user);
+      bcrypt.compare(oldPass, user.password).then((status) => {
+        if (status) {
+          console.log("Password matched");
+          async () => {
+            await users.findByIdAndUpdate(uzerId, {
+              $set: { password: newPass, confirmPassword: conPass },
+            });
+          };
+          console.log("very good");
+          res.redirect("/profile");
+        } else {
+          console.log("Password not match");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
   verifyPayment: (req, res) => {
-    console.log("VerifyPayment running");
-    const body = req.body;
+    try {
+      console.log("VerifyPayment running");
+      const body = req.body;
 
-    userHelpers
-      .verifyPayment(body)
-      .then(() => {
-        console.log(body.order.receipt);
-        console.log(req.body);
-        var orderId = body.order.receipt;
+      userHelpers
+        .verifyPayment(body)
+        .then(() => {
+          console.log(body.order.receipt);
+          console.log(req.body);
+          var orderId = body.order.receipt;
 
-        userHelpers.changePaymentStatus(orderId).then(() => {
-          console.log("Payment successful");
-          res.json({ status: true });
+          userHelpers.changePaymentStatus(orderId).then(() => {
+            console.log("Payment successful");
+            res.json({ status: true });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.json({ status: false });
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({ status: false });
-      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
-  paymentSuccess:(req,res)=>{
-    res.render("user/payment_success")
-  }
+  paymentSuccess: (req, res) => {
+    res.render("user/payment_success");
+  },
+  viewOrder: async (req, res) => {
+    try {
+      console.log("view order is running");
+      const orderId = req.params.id;
+      console.log(orderId);
+      const orderDetailes = await order.findById({ _id: orderId });
+      console.log(orderDetailes);
+      res.render("user/view_order");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  },
 };

@@ -32,7 +32,8 @@ const {
     cancelOrder,
     changePassword,
     verifyPayment,
-    paymentSuccess
+    paymentSuccess,
+    viewOrder
 } = require ('../controllers/userController')
 const product = require('../models/product')
 
@@ -45,7 +46,7 @@ router.get('/shop',shop)
 router.get('/signout',verifyUser,signout)
 router.get('/cart',verifyUser,cart)
 // router.get('/otp',verifyUser,otp)
-router.get('/productDetails',verifyUser,productDetails)
+router.get('/productDetails/:id',verifyUser,productDetails)
 router.get('/addtoCart/:id',verifyUser,addToCart)
 router.post('/signup',sign)
 // router.post('/otp',verifyUser,postOtp)
@@ -67,5 +68,7 @@ router.get('/orderPlaced',verifyUser,orderedPage)
 router.get('/paymentSuccess',verifyUser,paymentSuccess)
 router.get('/cancelOrder/:id',verifyUser,cancelOrder)
 router.post('/changePassword',verifyUser,changePassword)
+router.get('/viewOrder/:id',verifyUser,viewOrder)
+
 
 module.exports = router

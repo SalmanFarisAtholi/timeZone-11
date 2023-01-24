@@ -16,11 +16,11 @@ const productSchema = new Mongoose.Schema({
   },
   img: {
     type: String,
-    required: true,
+    required: true,  
   },
   description: {
-    type: String,
-    required: true,
+    type: String, 
+    required: true, 
   },
   mfg: {
     type: String,

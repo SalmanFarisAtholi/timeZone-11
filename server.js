@@ -74,6 +74,35 @@ db.once("open", () => console.log("Connected to Mongoose"));
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);
 
+app.use(function(req, res, next) {
+  const error = new Error(`Not found ${req.originalUrl}`)
+  error.status = 404
+  next(error)
+    });
+    
+    // error handler
+    app.use(function(err, req, res, next) {
+  
+      // render the error page
+      res.status(err.status || 500);
+      if(err.status==404){
+        if(err.admin){
+          res.render('404_error_admin',{error:err.message});
+        }else{
+          res.render('404_error',{error:err.message});
+        }
+     
+      }else{
+        if(err.admin){
+          res.render('404_error_admin',{error:'server down'})
+        }else{
+          res.render('404_error',{error:'server down'})
+        }
+       
+      }
+   
+    });
+
 app.listen(process.env.PORT || 3000, (err) => {
   if (err) console.log(err);
   else console.log("server running successfully");

@@ -27,7 +27,9 @@ const {
      deleteCoupen,
      editCoupen,
      postEditCoupen,
-     updateStatus
+     updateStatus,
+     salesReport,
+     salesDates
 } = require('../controllers/adminController')
 router.get('/',login)
 router.post('/',loginPost)
@@ -55,7 +57,8 @@ router.get('/deleteCoupen/:id',verifyAdmin,deleteCoupen)
 router.get('/editCoupen/:id',verifyAdmin,editCoupen)
 router.post('/editCoupen/:id',verifyAdmin,postEditCoupen)
 router.post('/updateStatus',verifyAdmin,updateStatus)
-
+router.get('/salesReport',verifyAdmin,salesReport)
+router.post('/dates',verifyAdmin,salesDates)
 
 
 

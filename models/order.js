@@ -32,7 +32,7 @@ const orderSchema = new Mongoose.Schema(
       },
     ],
     status: {
-      type: String,
+      type: String, 
     },
     // discountCoupon: {
     //   type: Mongoose.Schema.Types.ObjectId,

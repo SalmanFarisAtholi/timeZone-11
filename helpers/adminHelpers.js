@@ -7,7 +7,7 @@ const order = require("../models/order");
 const coupen = require("../models/coupon");
 
 module.exports = {
-  deleteCategory: (id) =>
+  deleteCategory: (id) => 
     new Promise((resolve, reject) => {
       const categoryId = id;
       category

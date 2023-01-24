@@ -3,18 +3,22 @@
 <div class="container-fluid">
   <div class="row" style="display: flex; justify-content: center">
     <div class="col-lg-10">
-      <table class="table table-striped">
+      
+   
+      <table id="ordertable" class="table table-striped">
+
         <thead>
           <tr>
-            <th scope="col"></th>
+            <th scope="col">No</th>
             <th scope="col">METHOD</th>
             <th scope="col">TOTAL</th>
             <th scope="col">STATUS</th>
             <th style="width: 220px" scope="col">USER</th>
-            <th scope="col"></th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <%ord.forEach(function(order,indux){ %>
+
 
         <tbody>
           <tr>
@@ -41,7 +45,7 @@
             <% } %>
             <td><%=order.address%></td>
             <td>
-              <a href="" class="btn_3">VIEW</a>
+              <a data-toggle="modal"  data-target="#Dmodal" href="" class="btn_3">VIEW</a>
             </td>
           </tr>
         </tbody>
@@ -50,6 +54,63 @@
     </div>
   </div>
 </div>
+
+
+
+
+<!-- Modal -->
+
+<div class="modal fade" id="Dmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+        <div class="card" style="width: 450px;">
+          <img class="card-img-top" src="..." alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">h</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  $(document).ready( function () {
+    $('#ordertable').DataTable();
+} );
+
+</script>
 
 <script>
   const changeStatus = function (newStatus, orderId) {

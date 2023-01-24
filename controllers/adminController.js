@@ -8,10 +8,14 @@ const coupon = require("../models/coupon");
 var adminEmail = process.env.adminEmail;
 var adminPassword = process.env.adminPassword;
 module.exports = {
-  login: (req, res) => {
+  login: (req, res,next) => { try {
     req.session.admin = false;
-    req.session.destroy();
     res.render("admin/login");
+    
+  } catch (error) {
+    next(error)
+  }
+  
   },
   loginPost: (req, res) => {
     console.log(req.body);
@@ -25,16 +29,21 @@ module.exports = {
     }
   },
   signout: (req, res) => {
-    req.session.destroy();
+    req.session.admin=null;
     admin = false;
     console.log("h");
     res.redirect("/admin/login");
   },
-  userManage: async (req, res) => {
+  userManage: async (req, res,next) => {
+    try{
     const userlist = await users.find();
     console.log(userlist);
 
     res.render("admin/user_management", { admin: true, userlist });
+    }catch(e){
+      e.admin=true
+      next(e)
+    }
   },
   categoryManage: async (req, res) => {
     const categoryList = await category.find({
@@ -286,7 +295,57 @@ module.exports = {
     );
     res.redirect("/admin/coupens");
   },
-  updateStatus:(req,res)=>{
-    adminHelpers.updateStatus(req,res)
-  }
+  updateStatus: (req, res) => {
+    adminHelpers.updateStatus(req, res);
+  },
+  salesReport: (req, res) => {
+    res.render("admin/sales_report_date");
+  },
+  salesDates: async (req, res) => {
+    let from=req.body.from
+    let to=req.body.to
+    console.log(from,"to",to);
+    let orders = await order.find();
+    let salesData = await order.aggregate([
+      {
+        $match: {
+          status: { $eq: "Delivered" },
+          $and: [
+            { date: { $gt:from  } },
+            { date: { $lt: to} },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userData",
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]);
+    let grandTotal = await order.aggregate([
+      {
+        $match: {
+          status: { $eq: "Delivered" },
+          $and: [
+            { date: { $gt: from } },
+            { date: { $lt: to } },
+          ],
+        },
+      },
+      {
+        $group:{
+          _id:null,
+          sum:{$sum:"$total"}
+        }
+      }
+    ]);
+    console.log(salesData);
+    res.render("admin/sales_report"),{grandTotal,salesData,page:"sales_report"}
+  },
 };
