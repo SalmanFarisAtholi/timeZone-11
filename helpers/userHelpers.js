@@ -12,7 +12,7 @@ var instance = new Razorpay({
 });
 
 module.exports = {
-  doLogin: (userData) => {
+  doLogin: (userData, next) => {
     try {
       return new Promise(async (resolve, reject) => {
         let response = {};
@@ -39,7 +39,7 @@ module.exports = {
       next(error);
     }
   },
-  getAllProduct: async (req, res) => {
+  getAllProduct: async (req, res, next) => {
     try {
       prod = await product.find({ access: true });
       return;
@@ -48,7 +48,7 @@ module.exports = {
       next(error);
     }
   },
-  getAllCategorys: async (req, res) => {
+  getAllCategorys: async (req, res, next) => {
     try {
       category = await category.find({ access: true });
       return;
@@ -58,7 +58,7 @@ module.exports = {
     }
   },
 
-  generateRazorpay: (orderId, totalPrice) => {
+  generateRazorpay: (orderId, totalPrice, next) => {
     try {
       console.log(orderId);
       return new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ module.exports = {
     }
   },
 
-  verifyPayment: (detailes) => {
+  verifyPayment: (detailes, next) => {
     try {
       return new Promise((resolve, reject) => {
         var crypto = require("crypto");
@@ -105,7 +105,7 @@ module.exports = {
       next(error);
     }
   },
-  changePaymentStatus: (orderId) => {
+  changePaymentStatus: (orderId, next) => {
     try {
       console.log(orderId + "koi");
       return new Promise((resolve, reject) => {

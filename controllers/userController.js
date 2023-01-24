@@ -397,7 +397,7 @@ module.exports = {
     try {
       const uzerId = req.session.user._id;
       console.log(uzerId);
-      const orde = await order.find({ userId: uzerId });
+      const orde = await order.find({ userId: uzerId }).sort([["date",-1]])
       res.render("user/orders", { orde });
     } catch (error) {
       console.log(error);
