@@ -53,6 +53,7 @@
                   name="email"
                   value=""
                   placeholder="Email"
+                  required
                 />
               </div>
               <div class="col-md-12 form-group p_star">
@@ -63,6 +64,8 @@
                   name="password"
                   value=""
                   placeholder="Password"
+                  required
+                  minlength="5"
                 />
               </div>
               <div class="col-md-12 form-group">
@@ -77,7 +80,7 @@
     </div>
   </div>
 </section>
-<%- include('../partials/admin_footer.ejs') %>
+<%- include('../partials/footer.ejs') %>
 
 <!-- 
 <div class="search-model-box">

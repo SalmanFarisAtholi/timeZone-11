@@ -16,7 +16,7 @@ const orderSchema = new Mongoose.Schema(
     payment: {
       type: String,
     },
-    address: {
+    address: { 
       type: String,
       // required: true,
     },

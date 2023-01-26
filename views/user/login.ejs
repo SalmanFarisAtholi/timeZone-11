@@ -38,12 +38,13 @@
             <form class="row contact_form" action="/login" method="post">
               <div class="col-md-12 form-group p_star">
                 <input
-                  type="text"
+                  type="email"
                   class="form-control"
                   id="email"
                   name="email"
                   value=""
                   placeholder="Email"
+                  required 
                 />
               </div>
               <div class="col-md-12 form-group p_star">
@@ -54,6 +55,8 @@
                   name="password"
                   value=""
                   placeholder="Password"
+                  required
+                  minlength="5"
                 />
               </div>
               <div class="col-md-12 form-group">
@@ -70,7 +73,7 @@
   </div>
 </section>
 
-<%- include('../partials/user_footer.ejs') %>
+<%- include('../partials/footer.ejs') %>
 
 <div class="search-model-box">
   <div class="h-100 d-flex align-items-center justify-content-center">

@@ -21,7 +21,11 @@ module.exports = {
     res.render("index");
   },
   login: (req, res) => {
-    res.render("user/login");
+    if(req.session.loggedIn){
+      res.redirect("/home")
+    }else{
+      res.render("user/login");
+    }
   },
   home: async (req, res, next) => {
     try {
@@ -78,7 +82,7 @@ module.exports = {
           req.session.loggedIn = response;
           req.session.user = response.user;
           console.log(req.session);
-          res.render("user/home");
+          res.redirect("/home");
         } else {
           req.session.loggedError = true;
           res.redirect("/login");
@@ -91,10 +95,9 @@ module.exports = {
   },
   signout: (req, res, next) => {
     try {
+      req.session.loggedIn = null;
       req.session.user = null;
-      // user=false
       res.redirect("/login");
-      console.log("hhhhhhhhhhhhhhhiiiiiiiiiiiiiii");
     } catch (error) {
       console.log(error);
       next(error);
@@ -485,7 +488,7 @@ module.exports = {
       console.log("view order is running");
       const orderId = req.params.id;
       console.log(orderId);
-      const orderDetailes = await order.findById({ _id: orderId });
+      let orderDetailes = await order.populate("products.items");
       console.log(orderDetailes);
       res.render("user/view_order");
     } catch (error) {
@@ -493,4 +496,10 @@ module.exports = {
       next(error);
     }
   },
+  aboutPage:(req,res)=>{
+    res.render("user/about")
+  },
+  contact:(req,res)=>{
+    res.render("user/contact")
+  }
 };

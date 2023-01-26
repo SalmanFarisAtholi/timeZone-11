@@ -30,14 +30,14 @@ module.exports = {
       }
     } catch (error) {
       error.admin = true;
-      next(error);
+      console.log('errr',error)
     }
   },
   signout: (req, res) => {
     req.session.admin = null;
     admin = false;
     console.log("h");
-    res.redirect("/admin/login");
+    res.redirect("/admin/");
   },
   userManage: async (req, res, next) => {
     try {
@@ -73,7 +73,7 @@ module.exports = {
     }
   },
   dashboard: (req, res) => {
-    res.render("admin/dashboard");
+    adminHelpers.dashboard(req.body)
   },
   blockUser: async (req, res, next) => {
     try {
@@ -297,7 +297,7 @@ module.exports = {
   },
   orderManage: async (req, res, next) => {
     try {
-      const ord = await order.find();
+      const ord = await order.find().sort([["date", -1]]);
       res.render("admin/order_management", { ord });
     } catch (error) {
       error.admin = true;
@@ -385,48 +385,18 @@ module.exports = {
   salesReport: (req, res) => {
     res.render("admin/sales_report_date");
   },
-  salesDates: async (req, res, next) => {
+  toSalesReport: (req, res) => {
+    adminHelpers.toSalesReport(req, res);
+  },
+  orderDetailes: async (req, res, next) => {
     try {
-      let from = req.body.from;
-      let to = req.body.to;
-      console.log(from, "to", to);
-      let orders = await order.find();
-      let salesData = await order.aggregate([
-        {
-          $match: {
-            status: { $eq: "Delivered" },
-            $and: [{ date: { $gt: from } }, { date: { $lt: to } }],
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "userId",
-            foreignField: "_id",
-            as: "userData",
-          },
-        },
-        {
-          $sort: { createdAt: -1 },
-        },
-      ]);
-      let grandTotal = await order.aggregate([
-        {
-          $match: {
-            status: { $eq: "Delivered" },
-            $and: [{ date: { $gt: from } }, { date: { $lt: to } }],
-          },
-        },
-        {
-          $group: {
-            _id: null,
-            sum: { $sum: "$total" },
-          },
-        },
-      ]);
-      console.log(salesData);
-      res.render("admin/sales_report"),
-        { grandTotal, salesData, page: "sales_report" };
+      const orderId = req.params.id;
+      const orderDetials = await order
+        .findOne({ _id: orderId })
+        .populate("products.item");
+      console.log("Goodd boy",orderDetials.products[0].item);
+      // console.log(orderDetials.products[0]);
+      res.render("admin/order_detailes",orderDetials)
     } catch (error) {
       error.admin = true;
       next(error);

@@ -43,7 +43,7 @@
                     class="row contact_form"
                     action="/signup"
                     method="post"
-                    
+                    id="signupform"
                   >
                     <div class="col-md-12 form-group p_star">
                       <input
@@ -53,6 +53,7 @@
                         name="name"
                         value=""
                         placeholder="Full Name"
+                        required
                       />
                     </div>
                    
@@ -64,6 +65,8 @@
                         name="password"
                         value=""
                         placeholder="Password"
+                        required
+                        minlength="8"
                       />
                     </div>
                     <div class="col-md-12 form-group p_star">
@@ -74,6 +77,8 @@
                         name="confirmPassword"
                         value=""
                         placeholder="Confirm Password"
+                        required
+                        minlength="8"
                       />
                     </div>
 
@@ -89,6 +94,7 @@
                         name="email"
                         value=""
                         placeholder="Email"
+                        required
                       />
                     </div>
                     <div class="col-md-12 form-group p_star">
@@ -99,6 +105,7 @@
                         name="mobile"
                         value=""
                         placeholder="Mobile Number"
+                        required
                       />
                     </div>
                     <div class="col-md-12 form-group">
@@ -117,5 +124,19 @@
     </main>
 
    
-
+<script>
+    jQuery('#signupform').validate({
+      rules: {
+          password: {
+              required: true,
+              minlength: 8
+          },
+          confirmPassword: {
+              required: true,
+              minlength: 8,
+              equalTo: "#password"
+          }
+      }
+  }); 
+</script>
    
