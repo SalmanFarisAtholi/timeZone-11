@@ -1,3 +1,11 @@
+<head>
+  <script
+    src="https://code.jquery.com/jquery-3.6.3.js"
+    integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
 <%- include('../partials/user_header.ejs') %>
 
 <main>
@@ -34,7 +42,6 @@
               <div class="row g-0 justify-content-center">
                 <div class="col-lg-8">
                   <div class="d-flex justify-content-around align-items-center">
-                   
                     <h1>Empty</h1>
                   </div>
                 </div>
@@ -86,6 +93,7 @@
                     >
                       +
                     </button>
+                    <i class="lnr lnr-chevron-up"></i>
                   </div>
                 </td>
 
@@ -94,8 +102,8 @@
                     onclick="return confirm ('Are you sure?')"
                     class="btn_1"
                     href="/deletecart/<%=pro.productId._id%>"
-                    >Remove</a>
-                  
+                    >Remove
+                  </a>
                 </td>
                 <%} }); %>
               </tr>
@@ -127,8 +135,8 @@
           <div class="checkout_btn_inner float-right">
             <a class="btn_1" href="/shop">Continue Shopping</a>
             <a class="btn_1 checkout_btn_1" href="/checkout/"
-              >Proceed to checkout</a>
-            
+              >Proceed to checkout</a
+            >
           </div>
         </div>
       </div>
@@ -149,27 +157,76 @@
   </section>
 </main>
 
+<%- include('../partials/footer.ejs') %>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.3.js"
+  integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+  crossorigin="anonymous"
+></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
 <script>
   function changeQuantity(proId, cnt) {
-    console.log("chage qty running..........................");
     let quantity = document.getElementById(proId).value;
-    console.log(quantity);
     quantity = parseInt(quantity);
-    let cont = parseInt(cnt);
 
+    let cont = parseInt(cnt);
     $.ajax({
-      url: "/changeQuantity",
+      url: "/changeQty",
       method: "POST",
-      dataType: "application/json",
-      encode: true,
       data: {
         productId: proId,
-        qty: quantity,
+        quantys: quantity,
         count: cont,
       },
-      success: () => {},
+      success: (response) => {
+        if (response.access) {
+          if (response.stock) {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: "error",
+              title: "Out Of Stock!!",
+            });
+            return;
+          }
+          if (response.remove) {
+            Swal.fire("Deleted!", "Your item has been deleted.", "success");
+            setTimeout(() => location.reload(), 2000);
+          } else {
+            document.getElementById(proId).value = response.status;
+            document.getElementById("total").innerHTML = response.total;
+          }
+        }
+        //       } else {
+        //         Swal.fire({
+        //           title: "Please Login!!",
+        //           width: 600,
+        //           padding: "3em",
+        //           color: "#716add",
+        //           background:
+        //             "#fff url(https://cdn.dribbble.com/users/289158/screenshots/17424235/media/cbb5c66fa688ad46ea08f5f817d37a98.jpg?compress=1&resize=400x300&vertical=top)",
+        //           backdrop: `
+        //   rgba(0,0,123,0.4)
+        //   url()
+        //   left top
+        //   no-repeat
+        // `,
+        //         });
+        //       }
+      },
     });
   }
+  let clicked = false;
 </script>
-
-<%- include('../partials/footer.ejs') %>

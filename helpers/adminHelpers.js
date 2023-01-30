@@ -79,8 +79,6 @@ module.exports = {
       ]);
       console.log(salesData);
       res.render("admin/sales_report", {
-        user: false,
-        admin: true,
         salesData,
         page: "sales_report",
       });
@@ -92,7 +90,7 @@ module.exports = {
   },
   dashboard: async (req, res) => {
     try {
-      const orders = await orders.find({});
+      const orders = await order.find({});
       let today = new Date();
       let todayStarting = new Date(today.setUTCHours(0, 0, 0, 0));
       let todayEnding = new Date(today.setUTCHours(23, 59, 59, 999));
@@ -214,7 +212,6 @@ module.exports = {
           $sort: { "_id.month": 1 },
         },
       ]);
-      console.log();
       res.render("admin/dashboard", {
         user: false,
         admin: true,
@@ -227,7 +224,7 @@ module.exports = {
         yearlySales,
       });
     } catch (error) {
-      console.log("Dashboard error",error);
+      console.log("Dashboard error", error);
     }
   },
 };

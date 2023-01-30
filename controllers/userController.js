@@ -7,7 +7,7 @@ const wishlist = require("../models/wishlist");
 const address = require("../models/address");
 const { data } = require("jquery");
 const order = require("../models/order");
-// const {sendotp,verifyotp} = require("../uttilities/otp");
+const {sendotp,verifyotp} = require("../uttilities/otp");
 
 module.exports = {
   signup: (req, res, next) => {
@@ -21,9 +21,9 @@ module.exports = {
     res.render("index");
   },
   login: (req, res) => {
-    if(req.session.loggedIn){
-      res.redirect("/home")
-    }else{
+    if (req.session.loggedIn) {
+      res.redirect("/home");
+    } else {
       res.render("user/login");
     }
   },
@@ -47,6 +47,7 @@ module.exports = {
   },
   sign: async (req, res, next) => {
     try {
+     let mob=req.body.mobile
       const pass = await bcrypt.hash(req.body.password, 10);
       const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
       console.log(req.body);
@@ -57,7 +58,7 @@ module.exports = {
         mobile: req.body.mobile,
         email: req.body.email,
       });
-      //  sendotp(req.body.mobile)
+      sendotp(mob)
       user.save((error, doc) => {
         if (error) {
           console.log(error);
@@ -254,25 +255,33 @@ module.exports = {
     }
   },
   changeQuantity: async (req, res, next) => {
+    console.log("working...");
+    
     try {
-      console.log("good boy");
-      let user = req.session.user;
-      const userz = await users.findOne(user);
-      userz.changeQty(
+      const id = req.session.loggedIn.user._id;
+      const useer = await users.findById(id);
+      console.log(req.body);
+      useer.changeQty(
         req.body.productId,
-        req.body.qty,
+        req.body.quantys,
         req.body.count,
         (response) => {
-          response.access = true;
-          console.log(response);
-          res.json(response);
+          if (response.stock) {
+            response.access = true;
+            res.json(response);
+          } else {
+            response.access = true;
+
+            res.json(response);
+          }
         }
-      );
-    } catch (error) {
-      console.log(error);
-      next(error);
+      ); 
+    } catch (e) {
+      console.log(e);
+      next(e);
     }
   },
+
   addAddress: (req, res) => {
     res.render("user/add_address");
   },
@@ -344,8 +353,8 @@ module.exports = {
       console.log("Place Order is running");
       console.log(req.body);
       const uzerId = req.session.user._id;
-      const userz = await users.findOne({ _id: uzerId });
-      let product = await userz.populate("cart.items.productId");
+      const user = await users.findOne({ _id: uzerId });
+      let product = await user.populate("cart.items.productId");
       var body = req.body.payment.toString();
       var addId = req.body.selector;
       console.log(addId);
@@ -364,9 +373,13 @@ module.exports = {
           payment: body,
           address: addId,
           status: statuz,
-          products: productIds,
+          products: user.cart.items,
         });
         newOrder.save();
+        user.updateOne(
+          { _id: uzerId },
+          { $set: { cart: { items: [] }, totalPrice: 0 } }
+        );
         res.json({ codSucces: true });
       } else {
         var statuz = "Pending";
@@ -382,6 +395,10 @@ module.exports = {
           products: productIds,
         });
         newOrder.save();
+        user.updateOne(
+          { _id: uzerId },
+          { $set: { cart: { items: [] }, totalPrice: 0 } }
+        );
         console.log(newOrder._id);
         const newOrderId = newOrder._id;
         userHelpers
@@ -400,7 +417,7 @@ module.exports = {
     try {
       const uzerId = req.session.user._id;
       console.log(uzerId);
-      const orde = await order.find({ userId: uzerId }).sort([["date",-1]])
+      const orde = await order.find({ userId: uzerId }).sort([["date", -1]]);
       res.render("user/orders", { orde });
     } catch (error) {
       console.log(error);
@@ -488,18 +505,20 @@ module.exports = {
       console.log("view order is running");
       const orderId = req.params.id;
       console.log(orderId);
-      let orderDetailes = await order.populate("products.items");
-      console.log(orderDetailes);
-      res.render("user/view_order");
+      var orderDetials = await order
+        .findOne({ _id: orderId })
+        .populate("products.productId");
+      console.log(orderDetials);
+      res.render("user/view_order", { orderDetials });
     } catch (error) {
       console.log(error);
       next(error);
     }
   },
-  aboutPage:(req,res)=>{
-    res.render("user/about")
+  aboutPage: (req, res) => {
+    res.render("user/about");
   },
-  contact:(req,res)=>{
-    res.render("user/contact")
-  }
+  contact: (req, res) => {
+    res.render("user/contact");
+  },
 };

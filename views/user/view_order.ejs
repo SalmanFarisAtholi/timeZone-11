@@ -1,0 +1,31 @@
+<%- include('../partials/user_header.ejs') %>
+<div class="container align-items-center">
+  <div class="row">
+    <%orderDetials.products.forEach(function(pro) {%>
+
+    <div class="card " style="width: 18rem; margin: 30px">
+      <img class="card-img-top" src="<%=pro.productId.img%>" />
+      <div class="card-body">
+        <h5 class="card-title"><%=pro.productId.name%></h5>
+        <h5 class=""><%=pro.productId.category%> </h5>
+        <h5 class="">Qty.<%=pro.qty%> </h5>
+
+        <p class="card-text">
+          <%=pro.productId.description%> <br />
+          ₹<%=pro.productId.price%>
+        </p>
+      </div>
+    </div>
+
+    <%} ) %>
+  </div>
+  <div class="card">
+    <h5 class="card-header">Delivery Address</h5>
+    <div class="card-body">
+      <h5 class="card-title"><%=orderDetials.address%> </h5>
+      <a href="/cancelOrder/<%=orderDetials._id%>" class="btn_3">CANCEL</a>
+
+    </div>
+  </div>
+</div>
+

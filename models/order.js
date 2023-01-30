@@ -20,16 +20,18 @@ const orderSchema = new Mongoose.Schema(
       type: String,
       // required: true,
     },
-    products: [
+    products:[
       {
-        item: {
-          type: Mongoose.Schema.Types.ObjectId,
+        productId: {
+          type: Mongoose.Types.ObjectId,
           ref: "product",
+          // re=quired: true
         },
-        quantity: {
+        qty: {
           type: Number,
-        },
-      },
+          // required: true
+        }
+      }
     ],
     status: {
       type: String, 

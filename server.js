@@ -91,7 +91,7 @@ app.use(function(req, res, next) {
         }else{
           res.render('404_error',{error:err.message});
         }
-     
+
       }else{
         if(err.admin){
           res.render('404_error_admin',{error:'server down'})

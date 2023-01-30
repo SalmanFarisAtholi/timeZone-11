@@ -1,7 +1,6 @@
 
 const Mongoose = require("mongoose");
-const product = require("../models/product");
-const Product = require("../models/product")
+const products = require("../models/product");
 
 const userSchema = new Mongoose.Schema({
   name: {
@@ -84,51 +83,48 @@ userSchema.methods.removeFromCart=function (product) {
 
     cart.items.splice(isExisting,1);
    
-    return this.save()  
+    return this.save()   
   }
 }
 
+
+
 userSchema.methods.changeQty = async function (productId, qty, count, cb) {
+  console.log("change qty is running");
   const cart = this.cart
-  console.log(qty)
+
   const quantity = parseInt(qty)
   const cnt = parseInt(count)
-  console.log('%%%%%%' + quantity)
+
   const response = {}
-  const Product = await product.findOne({ _id: productId })
-  if (cnt == -1 && quantity == 1 || cnt == -2) {
-    const Existing = cart.items.findIndex(objitems => {
-     return new String(objitems.product_id).trim() == new String(productId).trim()});
-
+  const product = await products.findOne({ _id: productId })
+  if (cnt === -1 && quantity === 1) {
+    const Existing = cart.items.findIndex(objitems => objitems.product_id == productId)
     cart.items.splice(Existing, 1)
-    cart.totalPrice -= Product.price * qty
+    cart.totalPrice -= product.price
     response.remove = true
-  } else if (cnt == 1) {
-    console.log('hiii-plus')
-    const Existing = cart.items.findIndex(objitems => {
-      return new String(objitems.product_id).trim() == new String(productId).trim()});
-      
+  } else if (cnt === 1) {
+    const Existing = cart.items.findIndex(objitems => objitems.product_id == productId)
+    if (cart.items[Existing].qty < product.stock) {
+      cart.items[Existing].qty += cnt
 
+      cart.totalPrice += product.price
+      response.status = cart.items[Existing].qty
+    } else {
+      response.stock = true
+    }
+  } else if (cnt === -1) {
+    const Existing = cart.items.findIndex(objitems => objitems.product_id == productId)
     cart.items[Existing].qty += cnt
-    console.log(cart.items[Existing].qty)
-    cart.totalPrice += Product.price
-    response.status = cart.items[Existing].qty
-  } else if (cnt == -1) {
-    console.log('hiiiiiii-minus')
-    const Existing = cart.items.findIndex(objitems => {
-      return new String(objitems.product_id).trim() == new String(productId).trim()});
-     
 
-    cart.items[Existing].qty += cnt
-    console.log(cart.items[Existing]) 
     cart.totalPrice -= product.price
     response.status = cart.items[Existing].qty
   }
   this.save().then((doc) => {
     response.total = doc.cart.totalPrice
-    cb(response)  
-  })  
-}  
+    cb(response)
+  })
+}
  
 
 module.exports = Mongoose.model("users", userSchema);
