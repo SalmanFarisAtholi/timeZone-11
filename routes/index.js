@@ -1,5 +1,5 @@
 const express = require('express')
-const { loginPost } = require('../controllers/adminController')
+const { loginPost } = require('../controllers/admin-controller')
 const {verifyUser} = require("../middleware/middleware")
 const router = express.Router()
 const {
@@ -36,7 +36,7 @@ const {
     viewOrder,
     aboutPage,
     contact
-} = require ('../controllers/userController')
+} = require ('../controllers/user-controller')
 const product = require('../models/product')
 
 

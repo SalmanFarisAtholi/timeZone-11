@@ -64,8 +64,10 @@ app.use(
 );
 app.use(express.json())
 
+const DATABASE_URL = process.env.DATABASE_URL;
+
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1/timeZone");
+mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection;
 
 db.on("error", (error) => console.error(error));

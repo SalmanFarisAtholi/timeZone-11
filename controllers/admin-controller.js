@@ -1,7 +1,7 @@
 const products = require("../models/product");
 const users = require("../models/userdb");
 const category = require("../models/category");
-const adminHelpers = require("../helpers/adminHelpers");
+const adminHelpers = require("../helpers/admin-helpers");
 const order = require("../models/order");
 const coupon = require("../models/coupon");
 

@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { response } = require("express");
-const userHelpers = require("../helpers/userHelpers");
+const userHelpers = require("../helpers/user-helpers");
 const users = require("../models/userdb");
 const product = require("../models/product");
 const wishlist = require("../models/wishlist");

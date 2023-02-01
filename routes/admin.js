@@ -31,7 +31,7 @@ const {
   salesReport,
   toSalesReport,
   orderDetailes,
-} = require("../controllers/adminController");
+} = require("../controllers/admin-controller");
 router.get("/", login);
 router.post("/", loginPost);
 router.get("/signout", verifyAdmin, signout);
