@@ -9,5 +9,6 @@ const bannerSchema = new Mongoose.Schema({
     type: String, 
     required: true,
   },
+  
 })
 module.exports = Mongoose.model("banner", bannerSchema);

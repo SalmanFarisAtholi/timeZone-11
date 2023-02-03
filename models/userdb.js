@@ -40,6 +40,9 @@ const userSchema = new Mongoose.Schema({
           type: Number,
           required: true,
         },
+        price:{
+          type:Number
+        }
       },
     ],
     totalPrice: Number,
@@ -60,7 +63,7 @@ userSchema.methods.addToCart = function (product) {
     console.log("kooooooooooi");
     cart.items[isExisting].qty += 1;
   } else {
-    cart.items.push({ productId: product._id, qty: 1 });
+    cart.items.push({ productId: product._id, qty: 1,price:product.price});
   }
   if (!cart.totalPrice) {
     cart.totalPrice = 0;

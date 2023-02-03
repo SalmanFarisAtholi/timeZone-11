@@ -90,7 +90,7 @@ module.exports = {
   },
   dashboard: async (req, res) => {
     try {
-      const orders = await order.find({});
+      const orders = await orders.find({});
       let today = new Date();
       let todayStarting = new Date(today.setUTCHours(0, 0, 0, 0));
       let todayEnding = new Date(today.setUTCHours(23, 59, 59, 999));
@@ -98,11 +98,11 @@ module.exports = {
       // finding today sales count:
       let todaySales = await orders.countDocuments({
         date: { $gt: todayStarting, $lt: todayEnding },
-        status: { $eq: "Delivered" },
+        orderStatus: { $eq: "Delivered" }
       });
       // finding total
       let totalSales = await orders.countDocuments({
-        status: { $eq: "Delivered" },
+        orderStatus: { $eq: "Delivered" }
       });
 
       // today revenue:
@@ -111,16 +111,16 @@ module.exports = {
           $match: {
             $and: [
               { date: { $gt: todayStarting, $lt: todayEnding } },
-              { status: { $eq: "Delivered" } },
-            ],
-          },
+              { orderStatus: { $eq: "Delivered" } }
+            ]
+          }
         },
         {
           $group: {
             _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-            todayRevenue: { $sum: "$total" },
-          },
-        },
+            todayRevenue: { $sum: "$total" }
+          }
+        }
       ]);
       let todayRevenue = 0;
       if (todayRev[0] == undefined || todayRev.length <= 0) {
@@ -133,15 +133,15 @@ module.exports = {
       let totalRev = await orders.aggregate([
         {
           $match: {
-            status: { $eq: "Delivered" },
-          },
+            orderStatus: { $eq: "Delivered" }
+          }
         },
         {
           $group: {
             _id: null,
-            totalRevenue: { $sum: "$total" },
-          },
-        },
+            totalRevenue: { $sum: "$total" }
+          }
+        }
       ]);
       let totalRevenue = totalRev[0].totalRevenue;
       // start of month:
@@ -173,44 +173,44 @@ module.exports = {
           $match: {
             date: {
               $gte: startOfMonth,
-              $lt: endOfMonth,
-            },
-          },
+              $lt: endOfMonth
+            }
+          }
         },
         {
           $group: {
             _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-            count: { $sum: 1 },
-          },
+            count: { $sum: 1 }
+          }
         },
         {
-          $sort: { _id: 1 },
-        },
+          $sort: { _id: 1 }
+        }
       ]);
 
       let yearlySales = await orders.aggregate([
         {
           $match: {
             $and: [
-              { status: "Delivered" },
+              { orderStatus: "Delivered" },
               {
                 date: {
                   $gte: startOfYear,
-                  $lt: endOfYear,
-                },
-              },
-            ],
-          },
+                  $lt: endOfYear
+                }
+              }
+            ]
+          }
         },
         {
           $group: {
             _id: { year: { $year: "$date" }, month: { $month: "$date" } },
-            totalSales: { $sum: 1 },
-          },
+            totalSales: { $sum: 1 }
+          }
         },
         {
-          $sort: { "_id.month": 1 },
-        },
+          $sort: { "_id.month": 1 }
+        }
       ]);
       res.render("admin/dashboard", {
         user: false,
@@ -221,10 +221,84 @@ module.exports = {
         totalRevenue,
         totalSales,
         salesData,
-        yearlySales,
+        yearlySales
       });
-    } catch (error) {
-      console.log("Dashboard error", error);
+    } catch (err) {
+      console.log("Dashboard data finding ERROR! ", err);
+      res.redirect("/user/404");
+    }
+  },
+  chart1: async (req, res) => {
+    console.log('success')
+    if (req.query.day) {
+      const sales = await order.aggregate([{
+        $match: { orderStatus: { $eq: 'delivered' } }
+      }, {
+        $group: {
+          _id: {
+            year: { $year: '$createdAt' },
+            month: { $month: '$createdAt' },
+            day: { $dayOfMonth: '$createdAt' }
+          },
+          totalPrice: { $sum: '$cart.totalPrice' },
+          items: { $sum: { $size: '$cart.items' } },
+          count: { $sum: 1 }
+        }
+      }, { $sort: { createdAt: -1 } }])
+  
+      res.json({ sales })
+    } else if (req.query.year) {
+      const sales = await order.aggregate([{
+        $match: { orderStatus: { $eq: 'delivered' } }
+      }, {
+        $group: {
+          _id: {
+            year: { $year: '$createdAt' }
+          },
+          totalPrice: { $sum: '$cart.totalPrice' },
+          items: { $sum: { $size: '$cart.items' } },
+          count: { $sum: 1 }
+        }
+      }, { $sort: { createdAt: -1 } }])
+      console.log(sales, 'huhuuuuuuuuuuu')
+      res.json({ sales })
+    } else {
+      const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
+      const sales = await order.aggregate([{
+        $match: { orderStatus: { $eq: 'delivered' } }
+      }, {
+        $group: {
+          _id: {
+  
+            month: { $month: '$createdAt' }
+  
+          },
+          totalPrice: { $sum: '$cart.totalPrice' },
+          items: { $sum: { $size: '$cart.items' } },
+          count: { $sum: 1 }
+        }
+      }, { $sort: { createdAt: -1 } }])
+  
+      const salesRep = sales.map((el) => {
+        const newOne = { ...el }
+        newOne._id.month = months[newOne._id.month - 1]
+        return newOne
+      })
+  
+      res.json({ salesRep })
     }
   },
 };

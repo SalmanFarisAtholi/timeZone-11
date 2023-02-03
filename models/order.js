@@ -30,6 +30,9 @@ const orderSchema = new Mongoose.Schema(
         qty: {
           type: Number,
           // required: true
+        },
+        price:{
+          type:Number
         }
       }
     ],

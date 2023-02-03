@@ -7,14 +7,12 @@
       <div class="row g-4">
         <div class="col-sm-6 col-xl-3">
           <div
-            class=" rounded d-flex align-items-center justify-content-between p-4"
+            class="rounded d-flex align-items-center justify-content-between p-4"
           >
             <i class="fa fa-chart-line fa-3x text-primary"></i>
             <div class="ms-3">
               <p class="mb-2">Today Sale</p>
-              <h6 class="mb-0">
-                44
-              </h6>
+              <h6 class="mb-0">44</h6>
             </div>
           </div>
         </div>
@@ -25,101 +23,97 @@
             <i class="fa fa-chart-bar fa-3x text-primary"></i>
             <div class="ms-3">
               <p class="mb-2">Total Sale</p>
-              <h6 class="mb-0">
-                33
-              </h6>
+              <h6 class="mb-0">33</h6>
             </div>
           </div>
         </div>
         <div class="col-sm-6 col-xl-3">
           <div
-            class=" rounded d-flex align-items-center justify-content-between p-4"
+            class="rounded d-flex align-items-center justify-content-between p-4"
           >
             <i class="fa fa-chart-area fa-3x text-primary"></i>
             <div class="ms-3">
               <p class="mb-2">Today Revenue</p>
-              <h6 class="mb-0">
-                66
-              </h6>
+              <h6 class="mb-0">66</h6>
             </div>
           </div>
         </div>
         <div class="col-sm-6 col-xl-3">
           <div
-            class=" rounded d-flex align-items-center justify-content-between p-4"
+            class="rounded d-flex align-items-center justify-content-between p-4"
           >
             <i class="fa fa-chart-pie fa-3x text-primary"></i>
             <div class="ms-3">
               <p class="mb-2">Total Revenue</p>
 
-              <h6 class="mb-0">55 </h6>
+              <h6 class="mb-0">55</h6>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- Sale & Revenue End -->
-
-    <!-- Sales Chart Start -->
-    <!-- <div class="container-fluid pt-4 px-4">
-      <div class="row g-4">
-        <div class="col-sm-12 col-xl-6">
-          <div class=" text-center rounded p-4">
-            <div class="d-flex align-items-center justify-content-center mb-4">
-              <h6 class="mb-0">Yearly Sales</h6>
-            </div>
-            <canvas id="worldwide-sales" style="width: 50%"></canvas>
-          </div>
-        </div>
-        <div class="col-sm-12 col-xl-6">
-          <div class=" text-center rounded p-4">
-            <div class="d-flex align-items-center justify-content-center mb-4">
-              <h6 class="mb-0">Monthly Sales</h6>
-            </div>
-            <canvas id="salse-revenue"></canvas>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- Sales Chart End -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <body>
-    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-    
-    <script>
-    var xValues = [50,60,70,80,90,100,110,120,130,140,150];
-    var yValues = [7,8,8,9,9,9,10,11,14,14,15];
-    
-    new Chart("myChart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [{
-          fill: false,
-          lineTension: 0,
-          backgroundColor: "rgba(0,0,255,1.0)",
-          borderColor: "rgba(0,0,255,0.1)",
-          data: yValues
-        }]
-      },
-      options: {
-        legend: {display: false},
-        scales: {
-          yAxes: [{ticks: {min: 6, max:16}}],
-        }
-      }
-    });
-    </script>
-    
+      <canvas id="myChart" style="width: 100%; max-width: 600px"></canvas>
+
+      <script>
+        var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+        var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+
+        new Chart("myChart", {
+          type: "line",
+          data: {
+            labels: xValues,
+            datasets: [
+              {
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,255,0.1)",
+                data: yValues,
+              },
+            ],
+          },
+          options: {
+            legend: { display: false },
+            scales: {
+              yAxes: [{ ticks: { min: 6, max: 16 } }],
+            },
+          },
+        });
+      </script>
     </body>
 
-    <!-- Footer Start -->
+    <canvas id="mChart" style="width: 100%; max-width: 600px"></canvas>
 
-    <!-- Footer End -->
+    <script>
+      var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+      var yValues = [55, 49, 44, 24, 15];
+      var barColors = ["red", "green", "blue", "orange", "brown"];
+
+      new Chart("mChart", {
+        type: "bar",
+        data: {
+          labels: xValues,
+          datasets: [
+            {
+              backgroundColor: barColors,
+              data: yValues,
+            },
+          ],
+        },
+        options: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "World Wine Production 2018",
+          },
+        },
+      });
+    </script>
   </div>
-  <!-- Content End -->
-
-  <!-- Back to Top -->
 </div>
+
+
 

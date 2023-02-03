@@ -409,7 +409,7 @@ module.exports = {
   addBanner: (req, res) => {
     try {
       console.log(req.body);
-      const image = req.body.img;
+      const image = req.files;
       console.log(image);
       if (!image) {
         res.redirect("/admin/banners", {
@@ -418,10 +418,13 @@ module.exports = {
           error: "file is not a image",
         });
       }
+      
       let imageUrl = image[0].path;
+      console.log(imageUrl);
       imageUrl = imageUrl.substring(6);
       console.log(`hi ${imageUrl}`);
       const newBanner = new banner({
+       
         description: req.body.description,
         img: imageUrl,
       });
