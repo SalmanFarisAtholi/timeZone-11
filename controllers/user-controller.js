@@ -215,14 +215,15 @@ module.exports = {
       if (wish) {
         // console.log('und');
         wish.addToWishlist(products, async (response) => {
+          console.log(response)
           const proDt = await wishlist
             .find({ userId: id }, { productItems: 1, _id: 0 })
             .populate("productItems");
           if (response.status) {
             console.log("entered ");
-            res.redirect("/wishlist");
+            res.json({ data: true });
           } else {
-            res.redirect("/shop");
+            res.json({ data: false });
           }
         });
       } else {
@@ -567,12 +568,12 @@ module.exports = {
       }
       const type = await category.find();
       const produc = await product
-        .find(query) 
+        .find(query)
         .populate("category")
         .sort(sortBy)
         .skip((page - 1) * limit)
         .limit(limit);
-      const total = await product.countDocuments(query); 
+      const total = await product.countDocuments(query);
       res.render("user/shop", {
         login: true,
         user: req.session.user,
