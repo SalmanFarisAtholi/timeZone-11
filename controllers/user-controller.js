@@ -9,6 +9,7 @@ const { data } = require("jquery");
 const order = require("../models/order");
 const category = require("../models/category");
 const { sendotp, verifyotp } = require("../uttilities/otp");
+const banner=require("../models/banner")
 
 module.exports = {
   signup: (req, res, next) => {
@@ -18,8 +19,10 @@ module.exports = {
       next(e);
     }
   },
-  index: (req, res) => {
-    res.render("index");
+  index:  async (req, res) => {
+    const b = await banner.find()
+      const ban=b[0]
+    res.render("index",{ban});
   },
   login: (req, res) => {
     if (req.session.loggedIn) {
@@ -30,8 +33,10 @@ module.exports = {
   },
   home: async (req, res, next) => {
     try {
+      const b = await banner.find()
+      const ban=b[0]
       const products = await product.find({ access: true });
-      res.render("user/home", { products });
+      res.render("user/home", { products,ban});
     } catch (error) {
       console.log(error);
       next(error);

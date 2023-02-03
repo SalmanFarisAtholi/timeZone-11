@@ -403,23 +403,21 @@ module.exports = {
       next(error);
     }
   },
-  banners: (req, res) => {
-    res.render("admin/banners");
+  banners: async (req, res) => {
+    const b = await banner.find()
+      const ban=b[0]
+    res.render("admin/banners",{ban});
   },
-  addBanner: (req, res) => {
+  addBanner: async (req, res,next) => {
     try {
       console.log(req.body);
       const image = req.files;
       console.log(image);
       if (!image) {
-        res.redirect("/admin/banners", {
-          user: false,
-          admin: true,
-          error: "file is not a image",
-        });
+      
       }
       
-      let imageUrl = image[0].path;
+      let imageUrl = image.img[0].path;
       console.log(imageUrl);
       imageUrl = imageUrl.substring(6);
       console.log(`hi ${imageUrl}`);
@@ -428,6 +426,9 @@ module.exports = {
         description: req.body.description,
         img: imageUrl,
       });
+      const ban = await banner.find()
+      const deId=ban[0]._id
+      const d= await banner.findOneAndDelete(deId)
       newBanner.save().then((newOne) => {
         console.log(newOne);
         res.redirect("/admin/banners");

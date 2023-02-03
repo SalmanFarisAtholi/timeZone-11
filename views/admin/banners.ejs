@@ -3,17 +3,18 @@
 >Add Banner</a
 >
 <p style="color: red;">Warning! if you add a banner, your last banner will be removed</p>
-<div>
+<div style="margin-left: 500px ;">
     <div >
-      <img  style="max-height: 400px; width: auto;"
-        src="/assets/img/hero/watch.png"
+      <img  style="max-height: 300px; width: auto;"
+        src=<%=ban.img%>
         alt=""
        
       />
+      
     </div>
     <div>
-        <h1>Select Your New Perfect Style</h1>
-    </div>
+      <h1><%=ban.description%> </h1>
+  </div>
   </div>
 
 
@@ -41,7 +42,7 @@
         </button>
       </div>
 
-      <form action="addBanner" method="post" class="">
+      <form action="addBanner" method="post" class="" enctype="multipart/form-data">
         <div class="col-md-12 form-group p_star">
           <input
             type="text"
@@ -54,7 +55,7 @@
         </div>
 
         <div class="form-outline mb-4">
-            <input type="file" name="img" id="image" class="form-control" />
+            <input type="file" name="img" id="image" class="form-control" multiple/>
             <label  class="form-label" for="form4Example1">Image</label>
           </div>
       
