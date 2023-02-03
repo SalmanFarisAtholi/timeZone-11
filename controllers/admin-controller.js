@@ -4,6 +4,7 @@ const category = require("../models/category");
 const adminHelpers = require("../helpers/admin-helpers");
 const order = require("../models/order");
 const coupon = require("../models/coupon");
+const banner = require("../models/banner");
 
 var adminEmail = process.env.adminEmail;
 var adminPassword = process.env.adminPassword;
@@ -30,7 +31,7 @@ module.exports = {
       }
     } catch (error) {
       error.admin = true;
-      console.log('errr',error)
+      console.log("errr", error);
     }
   },
   signout: (req, res) => {
@@ -73,7 +74,7 @@ module.exports = {
     }
   },
   dashboard: (req, res) => {
-    adminHelpers.dashboard(req.body)
+    adminHelpers.dashboard(req.body);
   },
   blockUser: async (req, res, next) => {
     try {
@@ -394,12 +395,43 @@ module.exports = {
       const orderDetials = await order
         .findOne({ _id: orderId })
         .populate("products.item");
-      console.log("Goodd boy",orderDetials.products[0].item);
+      console.log("Goodd boy", orderDetials.products[0].item);
       // console.log(orderDetials.products[0]);
-      res.render("admin/order_detailes",orderDetials)
+      res.render("admin/order_detailes", orderDetials);
     } catch (error) {
       error.admin = true;
       next(error);
+    }
+  },
+  banners: (req, res) => {
+    res.render("admin/banners");
+  },
+  addBanner: (req, res) => {
+    try {
+      console.log(req.body);
+      const image = req.body.img;
+      console.log(image);
+      if (!image) {
+        res.redirect("/admin/banners", {
+          user: false,
+          admin: true,
+          error: "file is not a image",
+        });
+      }
+      let imageUrl = image[0].path;
+      imageUrl = imageUrl.substring(6);
+      console.log(`hi ${imageUrl}`);
+      const newBanner = new banner({
+        description: req.body.description,
+        img: imageUrl,
+      });
+      newBanner.save().then((newOne) => {
+        console.log(newOne);
+        res.redirect("/admin/banners");
+      });
+    } catch (error) {
+      error.admin = true;
+      console.log(error);
     }
   },
 };

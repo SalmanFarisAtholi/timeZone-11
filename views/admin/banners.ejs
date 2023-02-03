@@ -1,0 +1,68 @@
+<%- include('../partials/admin_header.ejs') %>
+<div class="container"><a class="tp_btn" data-toggle="modal" data-target="#bannerModal"
+>Add Banner</a
+>
+<p style="color: red;">Warning! if you add a banner, your last banner will be removed</p>
+<div>
+    <div >
+      <img  style="max-height: 400px; width: auto;"
+        src="/assets/img/hero/watch.png"
+        alt=""
+       
+      />
+    </div>
+    <div>
+        <h1>Select Your New Perfect Style</h1>
+    </div>
+  </div>
+
+
+</div>
+<div
+  class="modal fade"
+  id="bannerModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Banner</h5>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form action="addBanner" method="post" class="">
+        <div class="col-md-12 form-group p_star">
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            name="description"
+            value=""
+            placeholder="Description"
+          />
+        </div>
+
+        <div class="form-outline mb-4">
+            <input type="file" name="img" id="image" class="form-control" />
+            <label  class="form-label" for="form4Example1">Image</label>
+          </div>
+      
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add Banner</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

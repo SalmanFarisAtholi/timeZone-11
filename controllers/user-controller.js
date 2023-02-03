@@ -58,7 +58,6 @@ module.exports = {
         mobile: req.body.mobile,
         email: req.body.email,
       });
-      sendotp(mob)
       user.save((error, doc) => {
         if (error) {
           console.log(error);

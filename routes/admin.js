@@ -31,6 +31,8 @@ const {
   salesReport,
   toSalesReport,
   orderDetailes,
+  banners,
+  addBanner
 } = require("../controllers/admin-controller");
 router.get("/", login);
 router.post("/", loginPost);
@@ -61,5 +63,7 @@ router.post("/updateStatus", verifyAdmin, updateStatus);
 router.get("/salesReport", verifyAdmin, salesReport);
 router.post("/dates", verifyAdmin, toSalesReport);
 router.get("/orderDetailes/:id", verifyAdmin, orderDetailes);
+router.get("/banners",verifyAdmin,banners);
+router.post("/addBanner",verifyAdmin,addBanner)
 
 module.exports = router;
