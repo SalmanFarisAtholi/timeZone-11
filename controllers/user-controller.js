@@ -7,7 +7,8 @@ const wishlist = require("../models/wishlist");
 const address = require("../models/address");
 const { data } = require("jquery");
 const order = require("../models/order");
-const {sendotp,verifyotp} = require("../uttilities/otp");
+const category = require("../models/category");
+const { sendotp, verifyotp } = require("../uttilities/otp");
 
 module.exports = {
   signup: (req, res, next) => {
@@ -38,8 +39,28 @@ module.exports = {
   },
   shop: async (req, res, next) => {
     try {
-      const products = await product.find({ access: true });
-      res.render("user/shop", { products });
+      const page = parseInt(req.query.page) || 1;
+      const itemsPerPage = 9;
+      const totalproducts = await product.find().countDocuments();
+      const produc = await product
+        .find({})
+        .populate("category", "title")
+        .lean()
+        .skip((page - 1) * itemsPerPage)
+        .limit(itemsPerPage);
+      const userId = req.session.id;
+      const type = await category.find();
+      res.render("user/shop", {
+        login: true,
+        user: req.session.user,
+        produc,
+        userId,
+        type,
+        page,
+        hasNextPage: itemsPerPage * page < totalproducts,
+        hasPreviousPage: page > 1,
+        PreviousPage: page - 1,
+      });
     } catch (error) {
       console.log(error);
       next(error);
@@ -47,7 +68,7 @@ module.exports = {
   },
   sign: async (req, res, next) => {
     try {
-     let mob=req.body.mobile
+      let mob = req.body.mobile;
       const pass = await bcrypt.hash(req.body.password, 10);
       const conPass = await bcrypt.hash(req.body.confirmPassword, 10);
       console.log(req.body);
@@ -255,7 +276,7 @@ module.exports = {
   },
   changeQuantity: async (req, res, next) => {
     console.log("working...");
-    
+
     try {
       const id = req.session.loggedIn.user._id;
       const useer = await users.findById(id);
@@ -274,7 +295,7 @@ module.exports = {
             res.json(response);
           }
         }
-      ); 
+      );
     } catch (e) {
       console.log(e);
       next(e);
@@ -519,5 +540,53 @@ module.exports = {
   },
   contact: (req, res) => {
     res.render("user/contact");
+  },
+  getAllProducts: async (req, res, next) => {
+    try {
+      const count = null;
+      const page = parseInt(req.query.page) || 1;
+      const limit = 9;
+
+      let sort = req.query.sort || "description";
+      req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+      const sortBy = {};
+      if (sort[1]) {
+        sortBy[sort[0]] = sort[1];
+      } else {
+        sortBy[sort[0]] = "asc";
+      }
+      const query = {};
+      if (req.query.categoryId) {
+        query.category = req.query.categoryId;
+      }
+      if (req.query.search) {
+        query.$or = [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { description: { $regex: req.query.search, $options: "i" } },
+        ];
+      }
+      const type = await category.find();
+      const produc = await product
+        .find(query) 
+        .populate("category")
+        .sort(sortBy)
+        .skip((page - 1) * limit)
+        .limit(limit);
+      const total = await product.countDocuments(query); 
+      res.render("user/shop", {
+        login: true,
+        user: req.session.user,
+        produc,
+        type,
+        count,
+        page,
+        hasNextPage: limit * page < total,
+        hasPreviousPage: page > 1,
+        PreviousPage: page - 1,
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
 };

@@ -20,150 +20,213 @@
         <div class="properties__button">
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a
+              <!-- <a
                 class="nav-item nav-link active"
                 id="nav-home-tab"
-                data-toggle="tab"
-                href="#nav-home"
-                role="tab"
-                aria-controls="nav-home"
-                aria-selected="true"
+                href=""
                 >Categorys</a
-              >
+              > -->
+              <style>
+                .dropbtn {
+                  background-color: #04aa6d;
+                  color: white;
+                  padding: 16px;
+                  font-size: 16px;
+                  border: none;
+                }
+
+                .dropdown {
+                  position: relative;
+                  display: inline-block;
+                }
+
+                .dropdown-content {
+                  display: none;
+                  position: absolute;
+                  background-color: #f1f1f1;
+                  min-width: 160px;
+                  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                  z-index: 1;
+                }
+
+                .dropdown-content a {
+                  color: black;
+                  padding: 12px 16px;
+                  text-decoration: none;
+                  display: block;
+                }
+
+                .dropdown-content a:hover {
+                  background-color: #ddd;
+                }
+
+                .dropdown:hover .dropdown-content {
+                  display: block;
+                }
+
+                .dropdown:hover .dropbtn {
+                  background-color: #3e8e41;
+                }
+              </style>
+              <div class="dropdown">
+                <button class="dropbtn">Categorys</button>
+                <div class="dropdown-content">
+                  <% type.forEach(element => { %> <%if(element.access==true){%>
+                  <a href="/allProduct?categoryId=<%=element.name%> "
+                    ><%= element.name %></a
+                  >
+
+                  <%}%> <% }) %>
+                </div>
+              </div>
+              <ul class="dropdown"></ul>
               <a
                 class="nav-item nav-link"
                 id="nav-profile-tab"
-                data-toggle="tab"
-                href="#nav-profile"
-                role="tab"
-                aria-controls="nav-profile"
-                aria-selected="false"
+                href="/allProduct?sort=price"
               >
-                Price high to low</a
+                Price low to high</a
               >
-              <form  class="example" action="/action_page.php" style="margin:auto;max-width:300px">
-                <input type="text" placeholder="Search" name="search">
+              <form
+                class="example"
+                action="/allProduct"
+                style="margin: auto;margin-right: 15px; max-width: 300px"
+              >
+                <input
+                  type="text"
+                  placeholder="Search"
+                  name="search"
+                  onkeyup="searchIt(this)"
+                />
                 <button type="submit"><i class="fa fa-search"></i></button>
               </form>
-              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body {
-  font-family: Arial;
-}
+              <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+              />
+              <style>
+                body {
+                  font-family: Arial;
+                }
 
-* {
-  box-sizing: border-box;
-}
+                * {
+                  box-sizing: border-box;
+                }
 
-form.example input[type=text] {
-  padding: 10px;
-  font-size: 17px;
-  border: 1px solid grey;
-  float: left;
-  width: 80%;
-  background: #f1f1f1;
-}
+                form.example input[type="text"] {
+                  padding: 10px;
+                  font-size: 17px;
+                  border: 1px solid grey;
+                  float: left;
+                  width: 80%;
+                  background: #f1f1f1;
+                }
 
-form.example button {
-  float: left;
-  width: 20%;
-  padding: 10px;
-  background: #2196F3;
-  color: white;
-  font-size: 17px;
-  border: 1px solid grey;
-  border-left: none;
-  cursor: pointer;
-}
+                form.example button {
+                  float: left;
+                  width: 20%;
+                  padding: 10px;
+                  background: #2196f3;
+                  color: white;
+                  font-size: 17px;
+                  border: 1px solid grey;
+                  border-left: none;
+                  cursor: pointer;
+                }
 
-form.example button:hover {
-  background: #0b7dda;
-}
+                form.example button:hover {
+                  background: #0b7dda;
+                }
 
-form.example::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-</style>
-          </nav>
-        </div>
+                form.example::after {
+                  content: "";
+                  clear: both;
+                  display: table;
+                }
+              </style>
+              <!-- </nav> -->
+            </div>
 
-        <div class="grid-list-view"></div>
+            <div class="grid-list-view"></div>
 
-        
-      </div>
+            <!-- </div> -->
 
-      <div class="tab-content" id="nav-tabContent">
-        <div
-          class="tab-pane fade show active"
-          id="nav-home"
-          role="tabpanel"
-          aria-labelledby="nav-home-tab"
-        >
-          <div class="row">
-            <% products.forEach(function(pro) { %>
+            <div class="tab-content" id="nav-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="nav-home"
+                role="tabpanel"
+                aria-labelledby="nav-home-tab"
+              >
+                <div class="row">
+                  <% produc.forEach(function(pro) { %> <%if(pro.access==true){%>
 
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-              <div class="single-popular-items mb-50 text-center">
-                <div class="popular-img">
-                <a   href="/productDetails/<%=pro._id%>"
-                >  <img
-                  class="img-fluid"
-                    src=" <%= pro.img %>"
-                    style="width: 360px; height: 380px"/>
-                   
-                </a>
-                  
+                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                    <div class="single-popular-items mb-50 text-center">
+                      <div class="popular-img">
+                        <a href="/productDetails/<%=pro._id%>">
+                          <img
+                            class="img-fluid"
+                            src=" <%= pro.img %>"
+                            style="width: 360px; height: 380px"
+                          />
+                        </a>
 
-                  
+                        <a
+                          href="/addtoCart/<%=pro._id%>"
+                          class="btn"
+                          style="
+                            font-size: 13px;
+                            font-weight: 600;
+                            letter-spacing: 0.03em;
+                            padding: 23px 134px;
+                          "
+                          >Add To cart</a
+                        >
 
-                    <a href="/addtoCart/<%=pro._id%>" class="btn"  style="
-                      font-size: 13px;
-                      font-weight: 600;
-                      letter-spacing: 0.03em;
-                      padding: 23px 134px;
-                    " 
-
-                    >Add To cart</a>
-
-                    
-                 
-                  <div class="favorit-items">
-                   <a href="/addToWishlist/<%=pro._id%>"> <span class="flaticon-heart"></span></a>
+                        <div class="favorit-items">
+                          <a href="/addToWishlist/<%=pro._id%>">
+                            <span class="flaticon-heart"></span
+                          ></a>
+                        </div>
+                      </div>
+                      <div class="popular-caption">
+                        <h3>
+                          <a href="/productDetails/">
+                            <%= pro.mfg %> <br />
+                            <%= pro.category %> <br />
+                            <%= pro.description %>
+                          </a>
+                        </h3>
+                        <span> ₹<%= pro.price %> </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="popular-caption">
-                  <h3>
-                    <a href="/productDetails/">
-                      <%= pro.mfg %> <br />
-                      <%= pro.category %> <br />
-                      <%= pro.description %>
-                    </a>
-                  </h3>
-                  <span> ₹<%= pro.price %> </span>
+
+                  <%}%> <% }); %>
                 </div>
               </div>
             </div>
 
-
- 
-        
-
-
-
-
-
-
-
-
-
-
-            <% }); %>
-          </div>
+            <%- include('../partials/footer.ejs') %>
+          </nav>
         </div>
       </div>
     </div>
   </section>
 </main>
-<%- include('../partials/footer.ejs') %>
+
+<script>
+  function searchIt(str) {
+    axios
+      .get(`http://localhost:3000/allProduct`, {
+        params: { search: str },
+      })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+</script>

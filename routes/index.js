@@ -35,7 +35,8 @@ const {
     paymentSuccess,
     viewOrder,
     aboutPage,
-    contact
+    contact,
+    getAllProducts
 } = require ('../controllers/user-controller')
 const product = require('../models/product')
 
@@ -44,7 +45,7 @@ router.get('/',index)
 router.get('/login',login)
 router.get('/signup',signup)  
 router.get('/home',home)
-router.get('/shop',shop)
+router.get('/shop',getAllProducts)
 router.get('/signout',verifyUser,signout)
 router.get('/cart',verifyUser,cart)
 // router.get('/otp',verifyUser,otp)
@@ -55,6 +56,7 @@ router.post('/signup',sign)
 router.post('/login',postLogin)
 router.get('/deleteCart/:id',verifyUser,deleteCart)
 router.get('/wishlist',verifyUser,viewWishList)
+router.get('/allProduct',verifyUser,getAllProducts)
 router.get('/addToWishlist/:id',verifyUser,doAddToWishlist)
 router.get('/deleteWishlist/:id',verifyUser,deleteWishlist)
 router.get('/profile',verifyUser,userProfile)
