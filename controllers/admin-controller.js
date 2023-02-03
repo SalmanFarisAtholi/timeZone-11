@@ -154,7 +154,7 @@ module.exports = {
   createProduct: (req, res, next) => {
     try {
       console.log("product is here");
-      const image = req.files.img;
+      const image = req.files.images;
       console.log(image);
       console.log(req.body);
       if (!image) {
@@ -164,8 +164,11 @@ module.exports = {
           error: "file is not a image",
         });
       }
-      let imageUrl = image[0].path;
-      imageUrl = imageUrl.substring(6);
+      let imageUrl = [];
+      image.forEach((el, i, arr) => {
+        imageUrl.push(arr[i].path.substring(6));
+      });
+
       console.log(`hi ${imageUrl}`);
       const newProduct = new products({
         name: req.body.name,
@@ -404,31 +407,29 @@ module.exports = {
     }
   },
   banners: async (req, res) => {
-    const b = await banner.find()
-      const ban=b[0]
-    res.render("admin/banners",{ban});
+    const b = await banner.find();
+    const ban = b[0];
+    res.render("admin/banners", { ban });
   },
-  addBanner: async (req, res,next) => {
+  addBanner: async (req, res, next) => {
     try {
       console.log(req.body);
       const image = req.files;
       console.log(image);
       if (!image) {
-      
       }
-      
+
       let imageUrl = image.img[0].path;
       console.log(imageUrl);
       imageUrl = imageUrl.substring(6);
       console.log(`hi ${imageUrl}`);
       const newBanner = new banner({
-       
         description: req.body.description,
         img: imageUrl,
       });
-      const ban = await banner.find()
-      const deId=ban[0]._id
-      const d= await banner.findOneAndDelete(deId)
+      const ban = await banner.find();
+      const deId = ban[0]._id;
+      const d = await banner.findOneAndDelete(deId);
       newBanner.save().then((newOne) => {
         console.log(newOne);
         res.redirect("/admin/banners");

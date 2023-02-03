@@ -24,7 +24,7 @@
       <% product.forEach(function(product,index) { %>
       <tr>
         <th class="p-4" scope="row"><%=index+1 %></th>
-        <td class="p-4" scope="row"><img src="<%=product.img %>" width="70px" height="auto" alt=""></td>
+        <td class="p-4" scope="row"><img src="<%=product.img[0] %>" width="70px" height="auto" alt=""></td>
         <td class="p-4" scope="row"><b><%= product.name%></b></td>
         <td class="p-4" scope="row"><b><%= product.price %></b></td>
         <td class="p-4" scope="row"><b><%= product.mfg %></b></td>
