@@ -439,4 +439,53 @@ module.exports = {
       console.log(error);
     }
   },
+  chart1: async (req, res,next) => {
+    try{
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const sale = await order.aggregate([
+        { $match: { status: { $eq: 'Delivered' } } },
+        {
+          $group: {
+            _id: {
+              month: { $month: '$date' },
+            },
+            totalPrice: { $sum: '$total' },
+            items: { $sum: { $size: '$products' } },
+            count: { $sum: 1 },
+
+          },
+        }, { $sort: { '_id.month': -1 } }]);
+      const salesRep = sale.map((el) => {
+        const newOne = { ...el };
+        newOne._id.month = months[newOne._id.month - 1]; 
+          return newOne;
+         
+      });
+
+      res.json({ salesRep });
+    }catch(e){
+      next(new Error(e))
+    }
+  },
+
+  chart2: async (req, res,next) => {
+    try{
+      const payment = await order.aggregate([
+        { $match: { status: { $eq: 'Delivered' } } },
+        {
+          $group: {
+            _id: {
+
+              payment: '$payment',
+
+            },
+            count: { $sum: 1 },
+
+          },
+        }, { $sort: { '_id.month': -1 } }]);
+      res.json({ payment });
+    }catch(e){
+      next(new Error(e))
+    }
+  },
 };
